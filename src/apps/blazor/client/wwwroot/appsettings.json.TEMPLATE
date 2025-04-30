@@ -1,0 +1,4 @@
+﻿{
+  "ApiBaseUrl": "${ImediatusBlazorClient_ApiBaseUrl}"
+}
+

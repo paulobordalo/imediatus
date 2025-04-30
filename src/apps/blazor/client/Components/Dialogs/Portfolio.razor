@@ -1,0 +1,132 @@
+﻿@using imediatus.Shared.Enums
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.AddTask" Class="mr-3 mb-n1" />
+            Create a Portfolio
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+
+        <MudGrid>
+            <MudItem xs="12" md="12">
+                <MudChip T="string" Label="true">To Do</MudChip>
+            </MudItem>
+            <MudItem xs="12" md="12">
+                <FileExplorerManager ContainerId="@Id" IsNewFolder="true" IsUpload="true" IsDownload="true" IsRename="true" IsDelete="true" />
+            </MudItem>
+            <MudItem xs="12" md="12">
+                <MudTextField T="string" Label="Summary" />
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudSelectExtended ItemCollection="_classifications" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" T="string" Label="Classification" AnchorOrigin="Origin.BottomCenter" SearchBoxClearable="true" />
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudSelectExtended ItemCollection="_priorities" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Piority" AnchorOrigin="Origin.BottomCenter">
+                    <ItemTemplate>
+                        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                <MudStack Row="true">
+                                    <MudIcon Icon="@Icons.Material.Outlined.Person" />
+                                    <MudText>@context.Value?.Item1</MudText>
+                                </MudStack>
+                            </MudStack>
+                        </MudStack>
+                    </ItemTemplate>
+                </MudSelectExtended>
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudSelectExtended ItemCollection="_costCenters" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" T="string" Label="Cost Center" AnchorOrigin="Origin.BottomCenter" SearchBoxClearable="true" />
+            </MudItem>
+            <MudItem xs="12" md="12">
+                <MudSelectExtended ItemCollection="_users" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Assignee" AnchorOrigin="Origin.BottomCenter">
+                    <ItemTemplate>
+                        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                            <MudText><b>@context.Value?.Item1</b></MudText>
+                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                <MudStack Row="true">
+                                    <MudIcon Icon="@Icons.Material.Outlined.Person" />
+                                    <MudText>@(context.Value?.Item3 == true ? "Retired" : "Active")</MudText>
+                                </MudStack>
+                                <MudChip T="string" Color="Color.Info" Variant="Variant.Outlined">Role: @context.Value?.Item2</MudChip>
+                            </MudStack>
+                        </MudStack>
+                    </ItemTemplate>
+                </MudSelectExtended>
+            </MudItem>
+            <MudItem xs="12" md="12">
+                <MudSpacer></MudSpacer>
+            </MudItem>
+
+        </MudGrid>
+
+</DialogContent>
+    <DialogActions>
+        <MudTooltip Text="Todas as alterações serão perdidas.">
+            <MudButton DropShadow="false" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" OnClick="MudDialog.Cancel">
+                Cancel
+            </MudButton>
+        </MudTooltip>
+        <MudTooltip Text="Guarda as alterações.">
+            <MudButton DropShadow="false" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" ButtonType="ButtonType.Submit" Color="Color.Success">
+                Save
+            </MudButton>
+        </MudTooltip>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+   
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private string[] _classifications =
+    {
+        "Public", "Internal", "Confidential", "Restricted",
+        "Secret", "Top Secret"
+    };
+
+    private string[] _costCenters =
+    {
+        "Agap2", "Adentis", "Bee Engineers"
+    };
+
+    Tuple<string, string, bool>[] _users = new Tuple<string, string, bool>[]
+    {
+       new Tuple<string, string, bool>("Kareem Abdul-Jabbar", "Admin", true),
+       new Tuple<string, string, bool>("LeBron James", "Admin", false),
+       new Tuple<string, string, bool>("Karl Malone", "Basic", true),
+       new Tuple<string, string, bool>("Kobe Bryant", "Admin", true),
+       new Tuple<string, string, bool>("Michael Jordan", "Basic", true),
+    };
+
+    Tuple<string, string, bool>[] _priorities = new Tuple<string, string, bool>[]
+    {
+       new Tuple<string, string, bool>("Low", "Admin", true),
+       new Tuple<string, string, bool>("Medium", "Admin", false),
+       new Tuple<string, string, bool>("High", "Basic", true),
+    };
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var portfolioFilter = new SearchPortfoliosCommand
+    //     {
+    //         PageSize = 2
+    //     };
+
+    //     if (await ApiHelper.ExecuteCallGuardedAsync(() => _client.SearchPortfoliosEndpointAsync("1", portfolioFilter), Toast, Navigation) is PortfolioResponsePagedList response)
+    //     {
+    //         var portfolios = response.Adapt<PaginationResponse<PortfolioResponse>>();
+
+    //         foreach (var portfolio in portfolios.Items)
+    //         {
+    //             _tasks.Add(new TaskItem() { TaskId = portfolio.SecondaryKey, Summary = portfolio.Summary, Status = PortfolioStatus.FromValue(portfolio.StatusId).Name, Priority = PortfolioPriority.FromValue(portfolio.PriorityId).Name, Identifier = PortfolioStatus.FromValue(portfolio.StatusId).Section });
+    //         }
+    //     }
+
+    // }
+
+}
