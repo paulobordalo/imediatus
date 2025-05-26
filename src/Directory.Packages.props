@@ -22,10 +22,10 @@
     <PackageVersion Include="Finbuckle.MultiTenant" Version="9.1.3" />
     <PackageVersion Include="Finbuckle.MultiTenant.AspNetCore" Version="9.1.3" />
     <PackageVersion Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="9.1.3" />
-    <PackageVersion Include="Hangfire" Version="1.8.18" />
+    <PackageVersion Include="Hangfire" Version="1.8.20" />
     <PackageVersion Include="Hangfire.MemoryStorage" Version="1.8.1.1" />
     <PackageVersion Include="Hangfire.PostgreSql" Version="1.20.12" />
-    <PackageVersion Include="MailKit" Version="4.12.0" />
+    <PackageVersion Include="MailKit" Version="4.12.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
