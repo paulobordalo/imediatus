@@ -12,6 +12,8 @@ public static class ImediatusResources
     public const string Products = nameof(Products);
     public const string Brands = nameof(Brands);
     public const string Portfolios = nameof(Portfolios);
+    public const string CostCenters = nameof(CostCenters);
     public const string Todos = nameof(Todos);
     public const string AuditTrails = nameof(AuditTrails);
+    public const string Domains = nameof(Domains);
 }

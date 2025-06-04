@@ -29,12 +29,12 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
 
     private static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
     {
-        var text = new StringBuilder(".NET 8 Starter Kit with Vertical Slice Architecture!");
+        var text = new StringBuilder(".NET 9 Starter Kit with Vertical Slice Architecture!");
         var info = new OpenApiInfo()
         {
             Title = "imediatus.WebApi",
             Version = description.ApiVersion.ToString(),
-            Contact = new OpenApiContact() { Name = "Mukesh Murugan", Email = "hello@codewithmukesh.com" }
+            Contact = new OpenApiContact() { Name = "Alex Bordalo", Email = "aabordalo@yahoo.com.br" }
         };
 
         if (description.IsDeprecated)

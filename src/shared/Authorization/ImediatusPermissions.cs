@@ -45,13 +45,21 @@ public static class ImediatusPermissions
         new("Delete Brands", ImediatusActions.Delete, ImediatusResources.Brands),
         new("Export Brands", ImediatusActions.Export, ImediatusResources.Brands),
 
-        //brands
+        //portfolios
         new("View Portfolios", ImediatusActions.View, ImediatusResources.Portfolios, IsBasic: true),
         new("Search Portfolios", ImediatusActions.Search, ImediatusResources.Portfolios, IsBasic: true),
         new("Create Portfolios", ImediatusActions.Create, ImediatusResources.Portfolios),
         new("Update Portfolios", ImediatusActions.Update, ImediatusResources.Portfolios),
         new("Delete Portfolios", ImediatusActions.Delete, ImediatusResources.Portfolios),
         new("Export Portfolios", ImediatusActions.Export, ImediatusResources.Portfolios),
+
+        //costcenters
+        new("View CostCenters", ImediatusActions.View, ImediatusResources.CostCenters, IsBasic: true),
+        new("Search CostCenters", ImediatusActions.Search, ImediatusResources.CostCenters, IsBasic: true),
+        new("Create CostCenters", ImediatusActions.Create, ImediatusResources.CostCenters),
+        new("Update CostCenters", ImediatusActions.Update, ImediatusResources.CostCenters),
+        new("Delete CostCenters", ImediatusActions.Delete, ImediatusResources.CostCenters),
+        new("Export CostCenters", ImediatusActions.Export, ImediatusResources.CostCenters),
 
         //todos
         new("View Todos", ImediatusActions.View, ImediatusResources.Todos, IsBasic: true),

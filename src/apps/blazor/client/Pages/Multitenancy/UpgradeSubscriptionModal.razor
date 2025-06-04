@@ -14,7 +14,7 @@
                     <MudTextField For="@(() => Request.Tenant)" @bind-Value="Request.Tenant" ReadOnly Underline="false" Label="Tenant Id" />
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField Value="Request.ExtendedExpiryDate.ToLongDateString()" ReadOnly Underline="false" Label="Current Expiry Date" />
+                    <MudTextField Value="Request.ExtendedExpiryDate.DateTime.ToLongDateString()" ReadOnly Underline="false" Label="Current Expiry Date" />
                 </MudItem>
                 <MudItem xs="12" md="12">
                     <MudDatePicker Color="Color.Secondary" Label="New Expiry Date" DateFormat="dddd, MMM dd, yyyy" @bind-Date="date"/>
@@ -35,7 +35,7 @@
     DateTime? date = DateTime.Today;
 
     protected override void OnInitialized() =>
-        date = Request.ExtendedExpiryDate;
+        date = Request.ExtendedExpiryDate.DateTime;
 
     private async Task UpgradeSubscriptionAsync()
     {

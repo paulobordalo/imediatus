@@ -6,6 +6,8 @@ using imediatus.Framework.Infrastructure.Behaviours;
 using imediatus.WebApi.Catalog.Application;
 using imediatus.WebApi.Catalog.Infrastructure;
 using imediatus.WebApi.Todo;
+using imediatus.WebApi.Workspace.Application;
+using imediatus.WebApi.Workspace.Infrastructure;
 using MediatR;
 
 namespace imediatus.WebApi.Host;
@@ -20,6 +22,7 @@ public static class Extensions
         Assembly[] assemblies =
         [
             typeof(CatalogMetadata).Assembly,
+            typeof(WorkspaceMetadata).Assembly,
             typeof(TodoModule).Assembly
         ];
 
@@ -35,12 +38,14 @@ public static class Extensions
 
         //register module services
         _ = builder.RegisterCatalogServices();
+        _ = builder.RegisterWorkspaceServices();
         _ = builder.RegisterTodoServices();
 
         //add carter endpoint modules
         _ = builder.Services.AddCarter(configurator: config =>
         {
             config.WithModule<CatalogModule.Endpoints>();
+            config.WithModule<WorkspaceModule.Endpoints>();
             config.WithModule<TodoModule.Endpoints>();
         });
 
@@ -53,6 +58,7 @@ public static class Extensions
 
         //register modules
         _ = app.UseCatalogModule();
+        _ = app.UseWorkspaceModule();
         _ = app.UseTodoModule();
 
         //register api versions

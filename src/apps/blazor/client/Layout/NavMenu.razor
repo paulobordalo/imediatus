@@ -1,34 +1,48 @@
 ﻿<PersonCard Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text); margin-bottom:0px!important" />
 <MudNavMenu>
+    <!-- START -->
     <MudText Typo="Typo.subtitle2" Color="Color.Surface" Class="ml-4 my-3">Start</MudText>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink Href="kanban" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewKanban">Kanban</MudNavLink>
     @if (_canViewAuditTrails)
     {
-        <MudNavLink Match="NavLinkMatch.Prefix" Href="/identity/audit-trail" Icon="@Icons.Material.Filled.WorkHistory">Audit Trail</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.Prefix" Href="/identity/audit-trail" Icon="@Icons.Material.Filled.History">Audit Trail</MudNavLink>
     }
-    <MudText Typo="Typo.subtitle2" Color="Color.Surface" Class="ml-4 my-3">Modules</MudText>
-@*     <MudNavGroup Title="Catalog" Icon="@Icons.Material.Filled.AddBox">
-         <MudNavLink Href="/catalog/products" Icon="@Icons.Material.Filled.ShoppingBag" Class="imediatus-nav-child">Products</MudNavLink>
-        <MudNavLink Href="/catalog/brands" Icon="@Icons.Material.Filled.Label" Class="imediatus-nav-child">Brands</MudNavLink>        
-        <MudNavLink Href="/catalog/portfolios" Icon="@Icons.Material.Filled.TaskAlt" Class="imediatus-nav-child">Portfolios</MudNavLink>
-    </MudNavGroup> *@
 
-    <MudNavLink Href="/todos" Icon="@Icons.Material.Filled.Checklist" Class="imediatus-nav-child">Todos</MudNavLink>
+    <!-- WORKSPACE -->
+    <MudText Typo="Typo.subtitle2" Color="Color.Surface" Class="ml-4 my-3">Workspace</MudText>
+    <MudNavLink Href="/workspace/kanban" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ViewKanban">Kanban</MudNavLink>
+    <MudNavLink Href="/workspace/chat" Icon="@Icons.Material.Filled.ChatBubble" Class="imediatus-nav-child">Chat</MudNavLink>
+
     @if (CanViewAdministrationGroup)
     {
         <MudText Typo="Typo.subtitle2" Color="Color.Surface" Class="ml-4 my-3">Administration</MudText>
+
+        <!-- CONNECTIONS -->
+        <MudNavGroup Title="Connections" Icon="@Icons.Material.Filled.Hub">
+            <MudNavLink Href="/connections/databases" Icon="@Icons.Material.Filled.Storage">Databases</MudNavLink>
+            <MudNavLink Href="/connections/storages" Icon="@Icons.Material.Filled.CloudQueue">Storages</MudNavLink>
+            <MudNavLink Href="/connections/openai" Icon="@Icons.Material.Filled.AutoAwesome">OpenAI API</MudNavLink>
+        </MudNavGroup>
+
+        <!-- ORCHESTRATOR -->
+        <MudNavGroup Title="Orchestrator" Icon="@Icons.Material.Filled.AccountTree">
+            <MudNavLink Href="/orchestrator/domains" Icon="@Icons.Material.Filled.Domain">Domains</MudNavLink>
+            <MudNavLink Href="/orchestrator/agents" Icon="@Icons.Material.Filled.SupportAgent">Agents</MudNavLink>
+            <MudNavLink Href="/orchestrator/contexts" Icon="@Icons.Material.Filled.Layers">Contexts</MudNavLink>
+        </MudNavGroup>
+
+        <!-- USERS / ROLES / TENANTS -->
         @if (_canViewUsers)
         {
-            <MudNavLink Match="NavLinkMatch.Prefix" Href="/identity/users" Icon="@Icons.Material.Filled.PeopleAlt">Users</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.Prefix" Href="/identity/users" Icon="@Icons.Material.Filled.People">Users</MudNavLink>
         }
         @if (_canViewRoles)
         {
-            <MudNavLink Href="/identity/roles" Icon="@Icons.Material.Filled.EmojiPeople">Roles</MudNavLink>
+            <MudNavLink Href="/identity/roles" Icon="@Icons.Material.Filled.AdminPanelSettings">Roles</MudNavLink>
         }
         @if (_canViewTenants)
         {
-            <MudNavLink Href="/tenants" Icon="@Icons.Material.Filled.GroupWork" Disabled="!_canViewTenants">Tenants</MudNavLink>
+            <MudNavLink Href="/tenants" Icon="@Icons.Material.Filled.Apartment" Disabled="!_canViewTenants">Tenants</MudNavLink>
         }
     }
 </MudNavMenu>

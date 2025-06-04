@@ -193,7 +193,7 @@ public sealed class JwtAuthenticationService : AuthenticationStateProvider, IAut
         return _localStorage.GetItemAsync<ICollection<string>>(StorageConstants.Local.Permissions);
     }
 
-    private IEnumerable<Claim> GetClaimsFromJwt(string jwt)
+    private static IEnumerable<Claim> GetClaimsFromJwt(string jwt)
     {
         var claims = new List<Claim>();
         string payload = jwt.Split('.')[1];
@@ -209,7 +209,7 @@ public sealed class JwtAuthenticationService : AuthenticationStateProvider, IAut
                 string? rolesString = roles.ToString();
                 if (!string.IsNullOrEmpty(rolesString))
                 {
-                    if (rolesString.Trim().StartsWith("["))
+                    if (rolesString.Trim().StartsWith('[')) // Fixed CA1866, S6610, and CA1310 by using StartsWith(char)
                     {
                         string[]? parsedRoles = JsonSerializer.Deserialize<string[]>(rolesString);
 
@@ -230,9 +230,9 @@ public sealed class JwtAuthenticationService : AuthenticationStateProvider, IAut
             claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString() ?? string.Empty)));
         }
 
-        return claims;
+        return claims.AsEnumerable();
     }
-    private byte[] ParseBase64WithoutPadding(string payload)
+    private static byte[] ParseBase64WithoutPadding(string payload)
     {
         payload = payload.Trim().Replace('-', '+').Replace('_', '/');
         string base64 = payload.PadRight(payload.Length + (4 - payload.Length % 4) % 4, '=');

@@ -29,7 +29,7 @@ public partial class MainLayout
     {
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true };
 
-        return DialogService.ShowAsync<Components.Dialogs.Portfolio>("Task Dialog", options);
+        return DialogService.ShowAsync<Components.Dialogs.Portfolio>("Portfolio Dialog", options);
     }
 
 

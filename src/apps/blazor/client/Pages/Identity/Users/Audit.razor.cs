@@ -31,7 +31,7 @@ public partial class Audit
     static Audit() =>
         TypeAdapterConfig<AuditTrail, RelatedAuditTrail>.NewConfig().Map(
             dest => dest.UTCTime,
-            src => DateTime.SpecifyKind(src.DateTime, DateTimeKind.Utc).ToLocalTime());
+            src => DateTime.SpecifyKind(src.DateTime.DateTime, DateTimeKind.Utc).ToLocalTime());
 
 
 

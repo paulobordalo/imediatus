@@ -19,8 +19,9 @@ public sealed class GetBrandHandler(
             async () =>
             {
                 var brandItem = await repository.GetByIdAsync(request.Id, cancellationToken);
-                if (brandItem == null) throw new BrandNotFoundException(request.Id);
-                return new BrandResponse(brandItem.Id, brandItem.Name, brandItem.Description);
+                return brandItem == null
+                    ? throw new BrandNotFoundException(request.Id)
+                    : new BrandResponse(brandItem.Id, brandItem.Name, brandItem.Description);
             },
             cancellationToken: cancellationToken);
         return item!;

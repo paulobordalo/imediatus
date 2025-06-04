@@ -82,7 +82,10 @@ public static class Extensions
                     .AddRuntimeInstrumentation()
                     .AddProcessInstrumentation()
                     .AddMeter(MetricsConstants.Todos)
-                    .AddMeter(MetricsConstants.Catalog);
+                    .AddMeter(MetricsConstants.Catalog)
+                    .AddMeter(MetricsConstants.Workspace)
+                    .AddMeter(MetricsConstants.Orchestrator)
+                    .AddMeter(MetricsConstants.Connection);
             })
             .WithTracing(tracing =>
             {

@@ -3,7 +3,6 @@ using imediatus.Framework.Core.Persistence;
 using imediatus.Framework.Infrastructure.Persistence;
 using imediatus.Framework.Infrastructure.Tenant;
 using imediatus.Shared.Constants;
-using imediatus.Shared.Enums;
 using imediatus.WebApi.Catalog.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +14,6 @@ public sealed class CatalogDbContext(IMultiTenantContextAccessor<ImediatusTenant
 {
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<Brand> Brands { get; set; } = null!;
-    public DbSet<Portfolio> Portfolios { get; set; } = null!;
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

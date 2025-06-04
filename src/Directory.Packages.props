@@ -19,9 +19,9 @@
     <PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.3.0" />
     <PackageVersion Include="Aspire.Microsoft.Data.SqlClient" Version="9.3.0" />
     <PackageVersion Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.3.0" />
-    <PackageVersion Include="Finbuckle.MultiTenant" Version="9.1.4" />
-    <PackageVersion Include="Finbuckle.MultiTenant.AspNetCore" Version="9.1.4" />
-    <PackageVersion Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="9.1.4" />
+    <PackageVersion Include="Finbuckle.MultiTenant" Version="9.2.0" />
+    <PackageVersion Include="Finbuckle.MultiTenant.AspNetCore" Version="9.2.0" />
+    <PackageVersion Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="9.2.0" />
     <PackageVersion Include="Hangfire" Version="1.8.20" />
     <PackageVersion Include="Hangfire.MemoryStorage" Version="1.8.1.1" />
     <PackageVersion Include="Hangfire.PostgreSql" Version="1.20.12" />
@@ -33,6 +33,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.14.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.5" />
     <PackageVersion Include="Microsoft.NET.Build.Containers" Version="8.0.100" />
@@ -43,14 +44,14 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.12" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="0.5.0-beta.6" />
     <PackageVersion Include="Serilog.Expressions" Version="5.0.0" />
-    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
+    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
     <PackageVersion Include="Soenneker.Swashbuckle.SmartEnumFilter" Version="3.0.587" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.2" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.4" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.5" />
     <PackageVersion Include="Swashbuckle.AspNetCore.ReDoc" Version="6.5.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.14.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Mapster" Version="7.4.0" />

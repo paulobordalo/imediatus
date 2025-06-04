@@ -1,0 +1,122 @@
+﻿@page "/workspace/kanban"
+@using imediatus.Shared.Enums
+
+<PageHeader Title="Kanban" Header="Header Portfolios" SubHeader="Manage your Portfolios." />
+
+<MudExpansionPanel Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;" Class="mud-elevation-25" Text="Advanced Search">
+    <MudGrid>
+        <MudItem xs="12" sm="12">
+            <MudTextField T="string" Label="Summary" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="12" Class="d-flex justify-end">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" Class="ml-auto" ButtonType="ButtonType.Submit">
+                Search
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudExpansionPanel>
+
+<MudDropContainer T="PortfolioItem" @ref="_dropContainer" ApplyDropClassesOnDragStarted="true" Items="_portfolios" ItemsSelector="@((item,dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" CanDropClass="mud-border-success" NoDropClass="mud-border-error" Class="d-flex flex-wrap flex-grow-1">
+    <ChildContent>
+        <MudDropZone T="PortfolioItem" Identifier="Backlog" AllowReorder="true" DraggingClass="mud-alert-text-dark" ItemDraggingClass="mud-dark-text" CanDrop="@((item) => item.Status == PortfolioStatus.Development.Name)" Class="rounded-lg mud-alert-text-dark border-2 border-dashed mud-border-lines-default pa-4 ma-2 flex-grow-1">
+            <MudText Typo="Typo.h6" Class="mb-4">Backlog</MudText>
+
+            <MudButton OnClick="@(() => AddPortfolioAsync())" Size="Size.Small" Color="Color.Primary" FullWidth="true">Add Portfolio</MudButton>
+            
+            @*             @if (_newPortfolioItem.NewPortfolioOpen)
+            {
+                <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudPaper Elevation="25" Class="pa-2 rounded-lg">
+                        <MudTextField Required MaxLength="64" @bind-Value="_newPortfolioItem.NewPortfolioName" Placeholder="New Portfolio" Underline="false" Margin="Margin.Dense" Class="mx-2 mt-n2"></MudTextField>
+                        <MudButton OnClick="@(() => AddPortfolioAsync(_newPortfolioItem))" Size="Size.Small" Color="Color.Primary" FullWidth="true">Add Portfolio</MudButton>
+                    </MudPaper>
+                </MudForm>
+            }
+            else
+            {
+                <MudButton OnClick="@(() => _newPortfolioItem.NewPortfolioOpen = !_newPortfolioItem.NewPortfolioOpen)" StartIcon="@Icons.Material.Filled.Add" FullWidth="true" Class="rounded-lg py-2">Add Portfolio</MudButton>
+            }
+
+ *@        </MudDropZone>
+        <MudDropZone T="PortfolioItem" Identifier="Working" DraggingClass="mud-alert-text-info" ItemDraggingClass="mud-info-text" CanDrop="@((item) => item.Status == PortfolioStatus.ToDo.Name)" Class="rounded-lg mud-alert-text-info border-2 border-dashed mud-border-lines-default pa-4 ma-2 flex-grow-1">
+            <MudText Typo="Typo.h6" Class="mb-4">Working</MudText>
+        </MudDropZone>
+        <MudDropZone T="PortfolioItem" Identifier="Waiting" DraggingClass="mud-alert-text-warning" ItemDraggingClass="mud-warning-text" Class="rounded-lg mud-alert-text-warning border-2 border-dashed mud-border-lines-default pa-4 ma-2 flex-grow-1">
+            <MudText Typo="Typo.h6" Class="mb-4">Accepting</MudText>
+        </MudDropZone>
+        <MudDropZone T="PortfolioItem" Identifier="Refused" DraggingClass="mud-alert-text-error" ItemDraggingClass="mud-error-text" CanDrop="@((item) => item.Status == PortfolioStatus.ToDo.Name)" Class="rounded-lg mud-alert-text-error border-2 border-dashed mud-border-lines-default pa-4 ma-2 flex-grow-1">
+            <MudText Typo="Typo.h6" Class="mb-4">Blocked</MudText>
+        </MudDropZone>
+        <MudDropZone T="PortfolioItem" Identifier="Ready" DraggingClass="mud-alert-text-primary" ItemDraggingClass="mud-primary-text" Class="rounded-lg mud-alert-text-primary border-2 border-dashed mud-border-lines-default pa-4 ma-2 flex-grow-1">
+            <MudText Typo="Typo.h6" Class="mb-4">Ready</MudText>
+        </MudDropZone>
+    </ChildContent>
+    <ItemRenderer>
+
+        <MudCard Elevation="25" Class="pa-0 my-4">
+            <MudCardHeader>
+                <CardHeaderAvatar>
+                    <MudTooltip Text="Assignee">
+                        <MudAvatar Color="Color.Secondary">
+                            <MudImage Src="https://localhost:7000/assets/images/ImediatusUser/04e1719ddfa94176a96926aeadcd361d9e4bdbb9a6a6491e84a9a3baa307582e.jpg"></MudImage>
+                        </MudAvatar>
+                    </MudTooltip>
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudTooltip>
+                        <ChildContent>
+                            <MudText Typo="Typo.h6">Portfolios - @context.SecondaryKey</MudText>
+                            <MudText Typo="Typo.body2">@context.Summary</MudText>
+                        </ChildContent>
+                        <TooltipContent>
+                            <MudText Typo="Typo.h6">h6 title</MudText>
+                            <MudText Typo="Typo.body2">body2 content</MudText>
+                            <MudIcon Icon="@Icons.Material.Filled.Star" />
+                        </TooltipContent>
+                    </MudTooltip>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Default">
+                        @if (context.Status == PortfolioStatus.ToDo.Name)
+                        {
+                            <MudMenuItem Label="Move to Development" Icon="@Icons.Material.Filled.Done" IconColor="Color.Info" />
+                        }
+                        <MudMenuItem Label="Edit" Icon="@Icons.Material.Filled.Edit" />
+                        <MudMenuItem Label="Delete" Icon="@Icons.Material.Filled.Delete" IconColor="Color.Error" OnClick="@(() => DeletePortfolioAsync(context))" />
+                        <MudMenuItem Label="Assign to me" Icon="@Icons.Material.Filled.AssignmentInd" />
+                        <MudMenuItem Label="Workflow" Icon="@Icons.Material.Filled.WorkHistory" />
+                        <MudMenuItem Label="Form" Icon="@Icons.Material.Filled.DynamicForm" />
+                        <MudMenuItem Label="Comments" Icon="@Icons.Material.Filled.Comment" />
+                        <MudMenuItem Label="Tags" Icon="@Icons.Material.Filled.Textsms" />
+                        <MudMenuItem Label="Dates" Icon="@Icons.Material.Filled.DateRange" />
+                    </MudMenu>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudGrid Class="py-2">
+                    <MudItem xs="6" Class="d-flex justify-start ps-3">
+                        <MudChip T="string" Label="true" Selected="@context.Selected" Color="@context.Color">@context.Status</MudChip>
+                        <MudChip T="string" Variant="Variant.Text" Color="@context.Color">@context.Priority</MudChip>
+                    </MudItem>
+                    <MudItem xs="6" Class="d-flex justify-end pe-3">
+                        <MudTooltip Text="Reporter">
+                            <MudAvatar Color="Color.Dark">A</MudAvatar>
+                        </MudTooltip>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+
+        @*   <MudCard Elevation="0" Outlined="true" Class="pa-1 rounded-lg my-3">
+            <MudCardContent>
+                <MudText Color="Color.Inherit">@context.Name</MudText>
+                <MudChip T="string" Icon="@Icons.Custom.Brands.MudBlazor" Label="true" Color="Color.Primary">MudBlazor</MudChip>
+                <MudChip T="string" Icon="@Icons.Custom.Uncategorized.Radioactive" Label="true" Color="Color.Warning" Style="color:black;">Radioactive Areas</MudChip>
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
+                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+            </MudCardActions>
+        </MudCard> *@
+    </ItemRenderer>
+</MudDropContainer>
