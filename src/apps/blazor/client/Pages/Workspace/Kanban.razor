@@ -15,29 +15,12 @@
         </MudItem>
     </MudGrid>
 </MudExpansionPanel>
-
 <MudDropContainer T="PortfolioItem" @ref="_dropContainer" ApplyDropClassesOnDragStarted="true" Items="_portfolios" ItemsSelector="@((item,dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" CanDropClass="mud-border-success" NoDropClass="mud-border-error" Class="d-flex flex-wrap flex-grow-1">
     <ChildContent>
         <MudDropZone T="PortfolioItem" Identifier="Backlog" AllowReorder="true" DraggingClass="mud-alert-text-dark" ItemDraggingClass="mud-dark-text" CanDrop="@((item) => item.Status == PortfolioStatus.Development.Name)" Class="rounded-lg mud-alert-text-dark border-2 border-dashed mud-border-lines-default pa-4 ma-2 flex-grow-1">
             <MudText Typo="Typo.h6" Class="mb-4">Backlog</MudText>
-
             <MudButton OnClick="@(() => AddPortfolioAsync())" Size="Size.Small" Color="Color.Primary" FullWidth="true">Add Portfolio</MudButton>
-            
-            @*             @if (_newPortfolioItem.NewPortfolioOpen)
-            {
-                <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-                    <MudPaper Elevation="25" Class="pa-2 rounded-lg">
-                        <MudTextField Required MaxLength="64" @bind-Value="_newPortfolioItem.NewPortfolioName" Placeholder="New Portfolio" Underline="false" Margin="Margin.Dense" Class="mx-2 mt-n2"></MudTextField>
-                        <MudButton OnClick="@(() => AddPortfolioAsync(_newPortfolioItem))" Size="Size.Small" Color="Color.Primary" FullWidth="true">Add Portfolio</MudButton>
-                    </MudPaper>
-                </MudForm>
-            }
-            else
-            {
-                <MudButton OnClick="@(() => _newPortfolioItem.NewPortfolioOpen = !_newPortfolioItem.NewPortfolioOpen)" StartIcon="@Icons.Material.Filled.Add" FullWidth="true" Class="rounded-lg py-2">Add Portfolio</MudButton>
-            }
-
- *@        </MudDropZone>
+        </MudDropZone>
         <MudDropZone T="PortfolioItem" Identifier="Working" DraggingClass="mud-alert-text-info" ItemDraggingClass="mud-info-text" CanDrop="@((item) => item.Status == PortfolioStatus.ToDo.Name)" Class="rounded-lg mud-alert-text-info border-2 border-dashed mud-border-lines-default pa-4 ma-2 flex-grow-1">
             <MudText Typo="Typo.h6" Class="mb-4">Working</MudText>
         </MudDropZone>
@@ -52,7 +35,6 @@
         </MudDropZone>
     </ChildContent>
     <ItemRenderer>
-
         <MudCard Elevation="25" Class="pa-0 my-4">
             <MudCardHeader>
                 <CardHeaderAvatar>
@@ -106,17 +88,5 @@
                 </MudGrid>
             </MudCardContent>
         </MudCard>
-
-        @*   <MudCard Elevation="0" Outlined="true" Class="pa-1 rounded-lg my-3">
-            <MudCardContent>
-                <MudText Color="Color.Inherit">@context.Name</MudText>
-                <MudChip T="string" Icon="@Icons.Custom.Brands.MudBlazor" Label="true" Color="Color.Primary">MudBlazor</MudChip>
-                <MudChip T="string" Icon="@Icons.Custom.Uncategorized.Radioactive" Label="true" Color="Color.Warning" Style="color:black;">Radioactive Areas</MudChip>
-            </MudCardContent>
-            <MudCardActions>
-                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
-                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
-            </MudCardActions>
-        </MudCard> *@
     </ItemRenderer>
 </MudDropContainer>

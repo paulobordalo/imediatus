@@ -14,7 +14,6 @@ using MudExtensions.Services;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 
-
 namespace imediatus.Blazor.Infrastructure;
 public static class Extensions
 {

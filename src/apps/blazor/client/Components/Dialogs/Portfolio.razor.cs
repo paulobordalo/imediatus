@@ -1,14 +1,18 @@
-﻿using imediatus.Blazor.Client.Components.EntityTable;
-using imediatus.Blazor.Client.Pages.Identity.Roles;
+﻿using BlazorJS;
+using FluentValidation;
+using imediatus.Blazor.Client.Components.EntityTable;
 using imediatus.Blazor.Infrastructure.Api;
+using imediatus.Blazor.Infrastructure.Auth;
 using imediatus.Shared.Authorization;
 using imediatus.Shared.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 using MudBlazor;
-using Syncfusion.Blazor.Diagrams;
-using Syncfusion.Blazor.TreeMap.Internal;
+using MudBlazor.Extensions.Components;
+using Newtonsoft.Json;
 using static imediatus.Blazor.Client.Pages.Workspace.Kanban;
 
 namespace imediatus.Blazor.Client.Components.Dialogs;
@@ -24,16 +28,28 @@ public partial class Portfolio
     [Inject]
     protected IApiClient _client { get; set; } = default!;
 
+    [Inject]
+    protected IJSRuntime JsRuntime { get; set; } = default!;
+
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+
+    [Inject]
+    protected IAuthenticationService AuthService { get; set; } = default!;
+
+    private MudForm _form;
     private readonly List<CostCenterResponse> _costCenters = new List<CostCenterResponse>();
-
-    private CostCenterResponse? _selectedCostCenter { get; set; }
-
-    private PortfolioClassification _selectedClassification { get; set; }
-
-    private PortfolioPriority _selectedPriority { get; set; }
+    private readonly List<UserDetail> _users = new List<UserDetail>();
+    private readonly List<PortfolioPriority> _priorities = [.. PortfolioPriority.List.OrderBy(o => o.Value)];
+    private readonly List<PortfolioClassification> _classifications = [.. PortfolioClassification.List.OrderBy(o => o.Value)];
+    private bool _saving = false;
+    private PortfolioModel _portfolioModel = new();
+    private FileModelFluentValidator ValidationRules = new();
 
     protected override async Task OnInitializedAsync()
     {
+        #region CostCenters
+
         var costCenterFilter = new SearchCostCentersCommand
         {
             PageSize = 50
@@ -48,127 +64,130 @@ public partial class Portfolio
                 _costCenters.Add(new CostCenterResponse() { Id = costCenter.Id.HasValue ? costCenter.Id.Value : Guid.NewGuid(), Name = costCenter.Name });
             }
         }
-    }
 
-    private void OnSelectedClassificationChanged(PortfolioClassification newValue)
-    {
-        _selectedClassification = newValue;
-    }
+        #endregion CostCenters
 
-    private void OnSelectedPriorityChanged(PortfolioPriority newValue)
-    {
-        _selectedPriority = newValue;
-    }
+        #region Utilizadores
 
-    private void OnSelectedCostCenterChanged(CostCenterResponse newValue)
-    {
-        _selectedCostCenter = newValue;
-    }
-
-    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
-
-    private void Cancel() => MudDialog.Cancel();
-
-    #nullable enable
-    private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
-    private string _dragClass = DefaultDragClass;
-    private readonly List<string> _fileNames = new();
-    private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
-
-    private async Task ClearAsync()
-    {
-        await (_fileUpload?.ClearAsync() ?? Task.CompletedTask);
-        _fileNames.Clear();
-        ClearDragClass();
-    }
-
-    private Task OpenFilePickerAsync()
-    => _fileUpload?.OpenFilePickerAsync() ?? Task.CompletedTask;
-
-    private void OnInputFileChanged(InputFileChangeEventArgs e)
-    {
-        ClearDragClass();
-        var files = e.GetMultipleFiles();
-        foreach (var file in files)
+        if (await ApiHelper.ExecuteCallGuardedAsync(() => _client.GetUsersListEndpointAsync(), Toast, Navigation) is ICollection<UserDetail> users)
         {
-            _fileNames.Add(file.Name);
+            foreach (var user in users)
+            {
+                _users.Add(new UserDetail() { Id = user.Id, Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, PhoneNumber = user.PhoneNumber, UserName = user.UserName, IsActive = user.IsActive });
+            }
+        }
+
+        var userLogged = (await AuthState).User;
+        if (userLogged.Identity?.IsAuthenticated == true)
+        {
+            var userIdString = userLogged.GetUserId()?.ToString();
+            if (!string.IsNullOrEmpty(userIdString))
+            {
+                var userDetail = _users.FirstOrDefault(w => w.Id.Equals(new Guid(userIdString)));
+                if (userDetail != null)
+                {
+                    _portfolioModel.Reporter = userDetail;
+                    _portfolioModel.Assignee = userDetail;
+                }
+            }
+        }
+
+        #endregion Utilizadores
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        await _form.Validate();
+        if (_form.IsValid)
+        {
+
+            CreatePortfolioCommand request = new CreatePortfolioCommand()
+            {
+                AssigneeId = _portfolioModel.Assignee.Id,
+                ClassificationId = _portfolioModel.Classification.Value,
+                CostCenterId = _portfolioModel.CostCenter?.Id,
+                PriorityId = _portfolioModel.Priority.Value,
+                Summary = _portfolioModel.Summary,
+                StatusId = _portfolioModel.Status.Value,
+                ReporterId = _portfolioModel.Reporter.Id,
+                Attachments = _portfolioModel.Files.Select(file => new UploadBlobCommand
+                {
+                    FileName = file.FileName,
+                    Extension = file.Extension,
+                    ContentType = file.ContentType,
+                    Data = file.Data,
+                    Url = file.Url,
+                    Path = file.Path
+                }).ToList()
+            };
+
+            foreach (var file in request.Attachments)
+            {
+                Toast.Add("Conteúdo do attachment " + file.FileName, MudBlazor.Severity.Info);
+            }
+
+            if (await ApiHelper.ExecuteCallGuardedAsync(() => _client.CreatePortfolioEndpointAsync("1", request), Toast))
+            {
+                Toast.Add("Portfolio created successfully.", MudBlazor.Severity.Success);
+            }
+
+            _saving = false;
+            MudDialog.Close(DialogResult.Ok(_portfolioModel));
+        }
+        else
+        {
+            _saving = false;
         }
     }
 
-    private void SetDragClass()
-    => _dragClass = $"{DefaultDragClass} mud-border-primary";
-
-    private void ClearDragClass()
-    => _dragClass = DefaultDragClass;
-
-    Tuple<string, string, bool>[] _users = new Tuple<string, string, bool>[]
+    public class PortfolioModel
     {
-       new Tuple<string, string, bool>("Kareem Abdul-Jabbar", "Admin", true),
-       new Tuple<string, string, bool>("LeBron James", "Admin", false),
-       new Tuple<string, string, bool>("Karl Malone", "Basic", true),
-       new Tuple<string, string, bool>("Kobe Bryant", "Admin", true),
-       new Tuple<string, string, bool>("Michael Jordan", "Basic", true),
-    };
+        public string Summary { get; set; }
+        public PortfolioStatus Status { get; set; } = PortfolioStatus.ToDo;
+        public PortfolioPriority Priority { get; set; } = PortfolioPriority.Medium;
+        public PortfolioClassification Classification { get; set; } = PortfolioClassification.Public;
+        public CostCenterResponse? CostCenter { get; set; }
+        public UserDetail Assignee { get; set; }
+        public UserDetail Reporter { get; set; }
+        public IBrowserFile File { get; set; }
+        public IList<UploadableFile> Files { get; set; } = [];
+    }
 
-    #region Prioridades
-
-    private readonly List<PortfolioPriority> _priorities = [.. PortfolioPriority.List.OrderBy(o => o.Value)];
-
-    private static string GetPriorityIcon(PortfolioPriority priority)
+    /// <summary>
+    /// A standard AbstractValidator which contains multiple rules and can be shared with the back end API
+    /// </summary>
+    internal class FileModelFluentValidator : AbstractValidator<PortfolioModel>
     {
-        return priority.Name switch
+        public FileModelFluentValidator()
         {
-            "Low" => Icons.Material.Filled.KeyboardDoubleArrowDown,
-            "Medium" => Icons.Material.Filled.KeyboardDoubleArrowRight,
-            "High" => Icons.Material.Filled.KeyboardDoubleArrowUp,
-            _ => Icons.Material.Filled.HelpOutline
+            RuleFor(x => x.Summary)
+                .NotEmpty()
+                .Length(1, 128);
+            RuleFor(x => x.Priority)
+            .NotEmpty();
+            RuleFor(x => x.Classification)
+            .NotEmpty();
+            RuleFor(x => x.Assignee)
+            .NotEmpty();
+            RuleFor(x => x.File)
+            .NotEmpty();
+            RuleFor(x => x.Files)
+                .NotEmpty();
+            When(x => x.File != null, () =>
+            {
+                RuleFor(x => x.File.Size).LessThanOrEqualTo(10485760).WithMessage("The maximum file size is 10 MB");
+            });
+        }
+        public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
+        {
+            var result = await ValidateAsync(ValidationContext<PortfolioModel>.CreateWithOptions((PortfolioModel)model, x => x.IncludeProperties(propertyName)));
+            if (result.IsValid)
+                return Array.Empty<string>();
+            return result.Errors.Select(e => e.ErrorMessage);
         };
     }
 
-    private static Color GetPriorityColor(PortfolioPriority priority)
-    {
-        return priority.Name switch
-        {
-            "Low" => Color.Info,
-            "Medium" => Color.Warning,
-            "High" => Color.Error,
-            _ => Color.Default
-        };
-    }
 
-    #endregion
-
-    #region Classificações
-
-    private readonly List<PortfolioClassification> _classifications = [.. PortfolioClassification.List.OrderBy(o => o.Value)];
-
-    private static string GetClassificationIcon(PortfolioClassification classification)
-    {
-        return classification.Name switch
-        {
-            "Public" => Icons.Material.Filled.Public,
-            "Internal" => Icons.Material.Filled.Work,
-            "Confidential" => Icons.Material.Filled.Lock,
-            "Restricted" => Icons.Material.Filled.Warning,
-            "Secret" => Icons.Material.Filled.VisibilityOff,
-            "Top Secret" => Icons.Material.Filled.Shield,
-            _ => Icons.Material.Filled.HelpOutline
-        };
-    }
-
-    private static Color GetClassificationColor(PortfolioClassification classification)
-    {
-        return classification.Name switch
-        {
-            "Public" => Color.Success,
-            "Internal" => Color.Info,
-            "Confidential" => Color.Warning,
-            "Restricted" => Color.Error,
-            "Secret" => Color.Dark,
-            "Top Secret" => Color.Dark,
-            _ => Color.Default
-        };
-    }
-
-    #endregion
 }
+

@@ -1,4 +1,8 @@
-﻿@using imediatus.Shared.Enums
+﻿@using imediatus.Blazor.Infrastructure.Helpers
+@using imediatus.Shared.Enums
+@using FluentValidation
+@using BlazorJS
+@using Newtonsoft.Json
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
@@ -7,109 +11,95 @@
         </MudText>
     </TitleContent>
     <DialogContent>
+        <MudForm @ref="_form" Model="@_portfolioModel" Validation="@(ValidationRules.ValidateValue)" ValidationDelay="0">
+            <MudGrid>
+                <MudItem xs="12" md="12">
+                    <MudChip T="string" Label="true">To Do</MudChip>
+                </MudItem>
+                <MudItem xs="12" md="12">
+                    <MudTextField @bind-Value="_portfolioModel.Summary"
+                                  For="@(() => _portfolioModel.Summary)"
+                                  Immediate="true"
+                                  Label="Summary" />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <MudSelectExtended T="PortfolioClassification" @bind-Value="_portfolioModel.Classification" For="@(() => _portfolioModel.Classification)" ItemCollection="_classifications" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Classification" AnchorOrigin="Origin.BottomCenter">
+                        <ItemTemplate>
+                            <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                    <MudStack Row="true">
+                                        <MudIcon Icon="@MudBlazorHelper.GetPortfolioClassificationIcon(context.Value ?? PortfolioClassification.Public)" Color="@MudBlazorHelper.GetPortfolioClassificationColor(context.Value ?? PortfolioClassification.Public)" />
+                                        <MudText>@context?.Value?.Name</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </ItemTemplate>
+                    </MudSelectExtended>
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <MudSelectExtended T="PortfolioPriority" @bind-Value="_portfolioModel.Priority" For="@(() => _portfolioModel.Priority)" ItemCollection="_priorities" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Priority" AnchorOrigin="Origin.BottomCenter">
+                        <ItemTemplate>
+                            <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                    <MudStack Row="true">
+                                        <MudIcon Icon="@MudBlazorHelper.GetPortfolioPriorityIcon(context.Value ?? PortfolioPriority.Medium)" Color="@MudBlazorHelper.GetPortfolioPriorityColor(context.Value ?? PortfolioPriority.Medium)" />
+                                        <MudText>@context?.Value?.Name</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </ItemTemplate>
+                    </MudSelectExtended>
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <MudSelectExtended T="CostCenterResponse" @bind-Value="_portfolioModel.CostCenter" For="@(() => _portfolioModel.CostCenter)" ItemCollection="_costCenters" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Cost Center" AnchorOrigin="Origin.BottomCenter">
+                        <ItemTemplate>
+                            <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                                <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                        <MudStack Row="true">
+                                            <MudText>@context?.Value?.Name</MudText>
+                                        </MudStack>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </ItemTemplate>
+                    </MudSelectExtended>
+                </MudItem>
+                <MudItem xs="12" md="12">
+                    <MudSelectExtended T="UserDetail" @bind-Value="_portfolioModel.Assignee" For="@(() => _portfolioModel.Assignee)" ItemCollection="_users" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Assignee" AnchorOrigin="Origin.BottomCenter">
+                        <ItemTemplate>
+                            <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                                <MudText><b>@string.Concat(@context?.Value?.LastName, ", ", @context?.Value?.FirstName)</b></MudText>
+                                <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                    <MudStack Row="true">
+                                        <MudIcon Icon="@Icons.Material.Outlined.Email" />
+                                        <MudText>@context.Value?.Email</MudText>
+                                    </MudStack>
+                                    <MudChip T="string" Color="@MudBlazorHelper.GetPortfolioStatusColor(@context.Value?.IsActive ?? false ? PortfolioStatus.Done : PortfolioStatus.Rejected)" Variant="Variant.Outlined">@(context.Value?.IsActive ?? false ? "Active" : "Retired")</MudChip>
+                                </MudStack>
+                            </MudStack>
+                        </ItemTemplate>
+                    </MudSelectExtended>
+                </MudItem>
+                <MudItem xs="12" md="12">
+                    @* <FileExplorerManager ContainerId="@Id" IsNewFolder="true" IsUpload="true" IsDownload="true" IsRename="true" IsDelete="true" /> *@
 
-        <MudGrid>
-            <MudItem xs="12" md="12">
-                <MudChip T="string" Label="true">To Do</MudChip>
-            </MudItem>
-            <MudItem xs="12" md="12">
-                <MudTextField T="string" Label="Summary" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudSelectExtended ItemCollection="_classifications" Value="_selectedClassification" ValueChanged="@((PortfolioClassification classification) => OnSelectedClassificationChanged(classification))" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Classification" AnchorOrigin="Origin.BottomCenter">
-                    <ItemTemplate>
-                        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
-                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                                <MudStack Row="true">
-                                    <MudIcon Icon="@GetClassificationIcon(context.Value ?? PortfolioClassification.Public)" Color="@GetClassificationColor(context.Value ?? PortfolioClassification.Public)" />
-                                    <MudText>@context?.Value?.Name</MudText>
-                                </MudStack>
-                            </MudStack>
-                        </MudStack>
-                    </ItemTemplate>
-                </MudSelectExtended>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudSelectExtended ItemCollection="_priorities" Value="_selectedPriority" ValueChanged="@((PortfolioPriority priority) => OnSelectedPriorityChanged(priority))" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Piority" AnchorOrigin="Origin.BottomCenter">
-                    <ItemTemplate>
-                        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
-                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                                <MudStack Row="true">
-                                    <MudIcon Icon="@GetPriorityIcon(context.Value ?? PortfolioPriority.Medium)" Color="@GetPriorityColor(context.Value ?? PortfolioPriority.Medium)" />
-                                    <MudText>@context?.Value?.Name</MudText>
-                                </MudStack>
-                            </MudStack>
-                        </MudStack>
-                    </ItemTemplate>
-                </MudSelectExtended>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudSelectExtended ItemCollection="_costCenters" Value="_selectedCostCenter" ValueChanged="@((CostCenterResponse costCenter) => OnSelectedCostCenterChanged(costCenter))" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Cost Center" AnchorOrigin="Origin.BottomCenter">
-                    <ItemTemplate>
-                        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
-                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                                <MudStack Row="true">
-                                    <MudText>@context?.Value?.Name</MudText>
-                                </MudStack>
-                            </MudStack>
-                        </MudStack>
-                    </ItemTemplate>
-                </MudSelectExtended>
-            </MudItem>
-            <MudItem xs="12" md="12">
-                <MudSelectExtended ItemCollection="_users" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Assignee" AnchorOrigin="Origin.BottomCenter">
-                    <ItemTemplate>
-                        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
-                            <MudText><b>@context.Value?.Item1</b></MudText>
-                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                                <MudStack Row="true">
-                                    <MudIcon Icon="@Icons.Material.Outlined.Person" />
-                                    <MudText>@(context.Value?.Item3 == true ? "Retired" : "Active")</MudText>
-                                </MudStack>
-                                <MudChip T="string" Color="Color.Info" Variant="Variant.Outlined">Role: @context.Value?.Item2</MudChip>
-                            </MudStack>
-                        </MudStack>
-                    </ItemTemplate>
-                </MudSelectExtended>
-            </MudItem>
-            <MudItem xs="12" md="12">
-                @* <FileExplorerManager ContainerId="@Id" IsNewFolder="true" IsUpload="true" IsDownload="true" IsRename="true" IsDelete="true" /> *@
-                <MudStack Style="width: 100%">
-                    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
-                                   @ref="@_fileUpload"
-                                   OnFilesChanged="OnInputFileChanged"
-                                   AppendMultipleFiles
-                                   Hidden="@false"
-                                   InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10"
-                                   InputStyle="opacity:0"
-                                   tabindex="-1"
-                                   @ondrop="@ClearDragClass"
-                                   @ondragenter="@SetDragClass"
-                                   @ondragleave="@ClearDragClass"
-                                   @ondragend="@ClearDragClass">
-                        <ActivatorContent>
-                            <MudPaper Height="300px"
-                                      Outlined="true"
-                                      Class="@_dragClass">
-                                <MudText Typo="Typo.h6">
-                                    Drag and drop files here or click
-                                </MudText>
-                                @foreach (var file in _fileNames)
-                                {
-                                    <MudChip T="string"
-                                             Color="Color.Dark"
-                                             Text="@file"
-                                             tabindex="-1" />
-                                }
-                            </MudPaper>
-                        </ActivatorContent>
-                    </MudFileUpload>
-                </MudStack>
-            </MudItem>
-
-        </MudGrid>
-
-</DialogContent>
+                <MudExUploadEdit T="UploadableFile"
+                                 Variant="Variant.Outlined"
+                                 For="@(() => _portfolioModel.Files)"
+                                 TextUploadFile="Click here to upload files"
+                                 TextDropZone="Drag and Drop files here"
+                                 Label="Add files"
+                                 ColorizeIcons="true"
+                                 MinHeight="80"
+                                 Class="MudExUploadExCustom"
+                                 AllowRename="true"
+                                 @bind-UploadRequests="_portfolioModel.Files">
+                </MudExUploadEdit>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
     <DialogActions>
         <MudTooltip Text="Todas as alterações serão perdidas.">
             <MudButton DropShadow="false" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" OnClick="MudDialog.Cancel">
@@ -117,8 +107,17 @@
             </MudButton>
         </MudTooltip>
         <MudTooltip Text="Guarda as alterações.">
-            <MudButton DropShadow="false" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" ButtonType="ButtonType.Submit" Color="Color.Success">
-                Save
+
+            <MudButton Disabled="@_saving" DropShadow="false" OnClick="@(async () => await SaveAsync())" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" ButtonType="ButtonType.Submit" Color="Color.Success">
+                @if (_saving)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Saving</MudText>
+                }
+                else
+                {
+                    <MudText>Save</MudText>
+                }
             </MudButton>
         </MudTooltip>
     </DialogActions>

@@ -16,6 +16,7 @@ public partial class FileExplorerManager
 {
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
+
     [Inject]
     protected IAuthenticationService AuthService { get; set; } = default!;
 

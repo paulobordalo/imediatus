@@ -18,6 +18,7 @@ using imediatus.Framework.Infrastructure.Persistence;
 using imediatus.Framework.Infrastructure.RateLimit;
 using imediatus.Framework.Infrastructure.SecurityHeaders;
 using imediatus.Framework.Infrastructure.Storage.Files;
+using imediatus.Framework.Infrastructure.Storage.Azure;
 using imediatus.Framework.Infrastructure.Tenant;
 using imediatus.Framework.Infrastructure.Tenant.Endpoints;
 using imediatus.Aspire.ServiceDefaults;
@@ -40,6 +41,7 @@ public static class Extensions
         builder.Services.ConfigureMultitenancy();
         builder.Services.ConfigureIdentity();
         builder.Services.AddCorsPolicy(builder.Configuration);
+        builder.Services.ConfigureAzureStorage(builder.Configuration);
         builder.Services.ConfigureFileStorage();
         builder.Services.ConfigureJwtAuth();
         builder.Services.ConfigureOpenApi();

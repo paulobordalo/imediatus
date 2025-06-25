@@ -1,4 +1,5 @@
 ﻿using imediatus.Framework.Core.Storage;
+using imediatus.Framework.Core.Storage.File;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ internal static class Extension
     {
         ArgumentNullException.ThrowIfNull(services);
         services.AddTransient<IStorageService, LocalFileStorageService>();
+        services.AddTransient<IStorageFileService, LocalFileStorageService>();
 
         return services;
     }

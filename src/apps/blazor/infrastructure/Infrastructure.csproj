@@ -9,6 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="NewFolder\**" />
+	  <EmbeddedResource Remove="NewFolder\**" />
+	  <None Remove="NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Blazored.LocalStorage" />
 		<PackageReference Include="CodeBeam.MudBlazor.Extensions" />
 		<PackageReference Include="MediatR" />
@@ -23,10 +29,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\shared\Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="NewFolder\" />
 	</ItemGroup>
 
   <Target Name="NSwag">

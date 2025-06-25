@@ -35,7 +35,7 @@ internal sealed partial class UserService(
     IJobService jobService,
     IMailService mailService,
     IMultiTenantContextAccessor<ImediatusTenantInfo> multiTenantContextAccessor,
-    IStorageService storageService
+    IStorageFileService storageService
     ) : IUserService
 {
     private void EnsureValidTenant()

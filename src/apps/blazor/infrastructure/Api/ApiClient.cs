@@ -29,6 +29,26 @@ namespace imediatus.Blazor.Infrastructure.Api
     {
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task AzureFileOperationsAsync(FileManagerDirectoryContent body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task AzureUploadAsync(string path = null, string action = null, string newName = null, System.Collections.Generic.IEnumerable<string> names = null, string name = null, long? size = null, string previousName = null, System.DateTimeOffset? dateModified = null, System.DateTimeOffset? dateCreated = null, bool? hasChild = null, bool? isFile = null, string type = null, string id = null, string filterPath = null, string filterId = null, string parentId = null, string targetPath = null, System.Collections.Generic.IEnumerable<string> renameFiles = null, bool? caseSensitive = null, string searchString = null, bool? showHiddenItems = null, bool? showFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> data = null, string targetData_Path = null, string targetData_Action = null, string targetData_NewName = null, System.Collections.Generic.IEnumerable<string> targetData_Names = null, string targetData_Name = null, long? targetData_Size = null, string targetData_PreviousName = null, System.DateTimeOffset? targetData_DateModified = null, System.DateTimeOffset? targetData_DateCreated = null, bool? targetData_HasChild = null, bool? targetData_IsFile = null, string targetData_Type = null, string targetData_Id = null, string targetData_FilterPath = null, string targetData_FilterId = null, string targetData_ParentId = null, string targetData_TargetPath = null, System.Collections.Generic.IEnumerable<string> targetData_RenameFiles = null, bool? targetData_CaseSensitive = null, string targetData_SearchString = null, bool? targetData_ShowHiddenItems = null, bool? targetData_ShowFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> targetData_Data = null, FileManagerDirectoryContent targetData_TargetData = null, bool? targetData_Permission_Copy = null, bool? targetData_Permission_Download = null, bool? targetData_Permission_Write = null, bool? targetData_Permission_WriteContents = null, bool? targetData_Permission_Read = null, bool? targetData_Permission_Upload = null, string targetData_Permission_Message = null, bool? permission_Copy = null, bool? permission_Download = null, bool? permission_Write = null, bool? permission_WriteContents = null, bool? permission_Read = null, bool? permission_Upload = null, string permission_Message = null, System.Collections.Generic.IEnumerable<FileParameter> uploadFiles = null, System.Collections.Generic.IEnumerable<FileParameter> targetData_UploadFiles = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task AzureDownloadAsync(string downloadInput = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task AzureGetImageAsync(string path = null, string action = null, string newName = null, System.Collections.Generic.IEnumerable<string> names = null, string name = null, long? size = null, string previousName = null, System.DateTimeOffset? dateModified = null, System.DateTimeOffset? dateCreated = null, bool? hasChild = null, bool? isFile = null, string type = null, string id = null, string filterPath = null, string filterId = null, string parentId = null, string targetPath = null, System.Collections.Generic.IEnumerable<string> renameFiles = null, bool? caseSensitive = null, string searchString = null, bool? showHiddenItems = null, bool? showFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> data = null, string targetData_Path = null, string targetData_Action = null, string targetData_NewName = null, System.Collections.Generic.IEnumerable<string> targetData_Names = null, string targetData_Name = null, long? targetData_Size = null, string targetData_PreviousName = null, System.DateTimeOffset? targetData_DateModified = null, System.DateTimeOffset? targetData_DateCreated = null, bool? targetData_HasChild = null, bool? targetData_IsFile = null, string targetData_Type = null, string targetData_Id = null, string targetData_FilterPath = null, string targetData_FilterId = null, string targetData_ParentId = null, string targetData_TargetPath = null, System.Collections.Generic.IEnumerable<string> targetData_RenameFiles = null, bool? targetData_CaseSensitive = null, string targetData_SearchString = null, bool? targetData_ShowHiddenItems = null, bool? targetData_ShowFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> targetData_Data = null, FileManagerDirectoryContent targetData_TargetData = null, bool? targetData_Permission_Copy = null, bool? targetData_Permission_Download = null, bool? targetData_Permission_Write = null, bool? targetData_Permission_WriteContents = null, bool? targetData_Permission_Read = null, bool? targetData_Permission_Upload = null, string targetData_Permission_Message = null, bool? permission_Copy = null, bool? permission_Download = null, bool? permission_Write = null, bool? permission_WriteContents = null, bool? permission_Read = null, bool? permission_Upload = null, string permission_Message = null, System.Collections.Generic.IEnumerable<FileParameter> uploadFiles = null, System.Collections.Generic.IEnumerable<FileParameter> targetData_UploadFiles = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// creates a brand
         /// </summary>
@@ -401,6 +421,31 @@ namespace imediatus.Blazor.Infrastructure.Api
         System.Threading.Tasks.Task<DisableTenantResponse> DisableTenantEndpointAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> TestAllAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task TestPOSTAsync(string body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> TestGETAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task TestPUTAsync(int id, string body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task TestDELETEAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Creates a todo item
         /// </summary>
@@ -691,6 +736,903 @@ namespace imediatus.Blazor.Infrastructure.Api
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task AzureFileOperationsAsync(FileManagerDirectoryContent body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/AzureProvider/AzureFileOperations"
+                    urlBuilder_.Append("api/AzureProvider/AzureFileOperations");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task AzureUploadAsync(string path = null, string action = null, string newName = null, System.Collections.Generic.IEnumerable<string> names = null, string name = null, long? size = null, string previousName = null, System.DateTimeOffset? dateModified = null, System.DateTimeOffset? dateCreated = null, bool? hasChild = null, bool? isFile = null, string type = null, string id = null, string filterPath = null, string filterId = null, string parentId = null, string targetPath = null, System.Collections.Generic.IEnumerable<string> renameFiles = null, bool? caseSensitive = null, string searchString = null, bool? showHiddenItems = null, bool? showFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> data = null, string targetData_Path = null, string targetData_Action = null, string targetData_NewName = null, System.Collections.Generic.IEnumerable<string> targetData_Names = null, string targetData_Name = null, long? targetData_Size = null, string targetData_PreviousName = null, System.DateTimeOffset? targetData_DateModified = null, System.DateTimeOffset? targetData_DateCreated = null, bool? targetData_HasChild = null, bool? targetData_IsFile = null, string targetData_Type = null, string targetData_Id = null, string targetData_FilterPath = null, string targetData_FilterId = null, string targetData_ParentId = null, string targetData_TargetPath = null, System.Collections.Generic.IEnumerable<string> targetData_RenameFiles = null, bool? targetData_CaseSensitive = null, string targetData_SearchString = null, bool? targetData_ShowHiddenItems = null, bool? targetData_ShowFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> targetData_Data = null, FileManagerDirectoryContent targetData_TargetData = null, bool? targetData_Permission_Copy = null, bool? targetData_Permission_Download = null, bool? targetData_Permission_Write = null, bool? targetData_Permission_WriteContents = null, bool? targetData_Permission_Read = null, bool? targetData_Permission_Upload = null, string targetData_Permission_Message = null, bool? permission_Copy = null, bool? permission_Download = null, bool? permission_Write = null, bool? permission_WriteContents = null, bool? permission_Read = null, bool? permission_Upload = null, string permission_Message = null, System.Collections.Generic.IEnumerable<FileParameter> uploadFiles = null, System.Collections.Generic.IEnumerable<FileParameter> targetData_UploadFiles = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var boundary_ = System.Guid.NewGuid().ToString();
+                    var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
+                    content_.Headers.Remove("Content-Type");
+                    content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
+
+                    if (uploadFiles == null)
+                        throw new System.ArgumentNullException("uploadFiles");
+                    else
+                    {
+                        foreach (var item_ in uploadFiles)
+                        {
+                            var content_uploadFiles_ = new System.Net.Http.StreamContent(item_.Data);
+                            if (!string.IsNullOrEmpty(item_.ContentType))
+                                content_uploadFiles_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(item_.ContentType);
+                            content_.Add(content_uploadFiles_, "UploadFiles", item_.FileName ?? "UploadFiles");
+                        }
+                    }
+
+                    if (targetData_UploadFiles == null)
+                        throw new System.ArgumentNullException("targetData_UploadFiles");
+                    else
+                    {
+                        foreach (var item_ in targetData_UploadFiles)
+                        {
+                            var content_targetData_UploadFiles_ = new System.Net.Http.StreamContent(item_.Data);
+                            if (!string.IsNullOrEmpty(item_.ContentType))
+                                content_targetData_UploadFiles_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(item_.ContentType);
+                            content_.Add(content_targetData_UploadFiles_, "TargetData.UploadFiles", item_.FileName ?? "TargetData.UploadFiles");
+                        }
+                    }
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/AzureProvider/AzureUpload"
+                    urlBuilder_.Append("api/AzureProvider/AzureUpload");
+                    urlBuilder_.Append('?');
+                    if (path != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Path")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(path, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (action != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Action")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(action, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (newName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("NewName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(newName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (names != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Names") + "=");
+                        foreach (var item_ in names)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (name != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Name")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (size != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Size")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(size, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (previousName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PreviousName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(previousName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (dateModified != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DateModified")).Append('=').Append(System.Uri.EscapeDataString(dateModified.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (dateCreated != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DateCreated")).Append('=').Append(System.Uri.EscapeDataString(dateCreated.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hasChild != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("HasChild")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(hasChild, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (isFile != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("IsFile")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(isFile, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (type != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Type")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(type, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (filterPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("FilterPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(filterPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (filterId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("FilterId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(filterId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (parentId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ParentId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(parentId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (renameFiles != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("RenameFiles") + "=");
+                        foreach (var item_ in renameFiles)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (caseSensitive != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("CaseSensitive")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(caseSensitive, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (searchString != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SearchString")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(searchString, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showHiddenItems != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowHiddenItems")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showHiddenItems, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showFileExtension != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowFileExtension")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showFileExtension, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (data != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Data") + "=");
+                        foreach (var item_ in data)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_Path != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Path")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Path, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Action != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Action")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Action, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_NewName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.NewName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_NewName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Names != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Names") + "=");
+                        foreach (var item_ in targetData_Names)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_Name != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Name")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Name, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Size != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Size")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Size, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_PreviousName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.PreviousName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_PreviousName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_DateModified != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.DateModified")).Append('=').Append(System.Uri.EscapeDataString(targetData_DateModified.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_DateCreated != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.DateCreated")).Append('=').Append(System.Uri.EscapeDataString(targetData_DateCreated.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_HasChild != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.HasChild")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_HasChild, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_IsFile != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.IsFile")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_IsFile, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Type != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Type")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Type, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_FilterPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.FilterPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_FilterPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_FilterId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.FilterId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_FilterId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_ParentId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.ParentId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_ParentId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_TargetPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.TargetPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_TargetPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_RenameFiles != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.RenameFiles") + "=");
+                        foreach (var item_ in targetData_RenameFiles)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_CaseSensitive != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.CaseSensitive")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_CaseSensitive, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_SearchString != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.SearchString")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_SearchString, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_ShowHiddenItems != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.ShowHiddenItems")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_ShowHiddenItems, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_ShowFileExtension != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.ShowFileExtension")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_ShowFileExtension, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Data != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Data") + "=");
+                        foreach (var item_ in targetData_Data)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_TargetData != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.TargetData")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_TargetData, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Copy != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Copy")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Copy, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Download != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Download")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Download, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Write != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Write")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Write, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_WriteContents != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.WriteContents")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_WriteContents, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Read != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Read")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Read, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Upload != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Upload")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Upload, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Message != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Message")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Message, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Copy != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Copy")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Copy, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Download != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Download")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Download, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Write != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Write")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Write, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_WriteContents != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.WriteContents")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_WriteContents, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Read != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Read")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Read, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Upload != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Upload")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Upload, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Message != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Message")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Message, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task AzureDownloadAsync(string downloadInput = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/AzureProvider/AzureDownload"
+                    urlBuilder_.Append("api/AzureProvider/AzureDownload");
+                    urlBuilder_.Append('?');
+                    if (downloadInput != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("downloadInput")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(downloadInput, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task AzureGetImageAsync(string path = null, string action = null, string newName = null, System.Collections.Generic.IEnumerable<string> names = null, string name = null, long? size = null, string previousName = null, System.DateTimeOffset? dateModified = null, System.DateTimeOffset? dateCreated = null, bool? hasChild = null, bool? isFile = null, string type = null, string id = null, string filterPath = null, string filterId = null, string parentId = null, string targetPath = null, System.Collections.Generic.IEnumerable<string> renameFiles = null, bool? caseSensitive = null, string searchString = null, bool? showHiddenItems = null, bool? showFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> data = null, string targetData_Path = null, string targetData_Action = null, string targetData_NewName = null, System.Collections.Generic.IEnumerable<string> targetData_Names = null, string targetData_Name = null, long? targetData_Size = null, string targetData_PreviousName = null, System.DateTimeOffset? targetData_DateModified = null, System.DateTimeOffset? targetData_DateCreated = null, bool? targetData_HasChild = null, bool? targetData_IsFile = null, string targetData_Type = null, string targetData_Id = null, string targetData_FilterPath = null, string targetData_FilterId = null, string targetData_ParentId = null, string targetData_TargetPath = null, System.Collections.Generic.IEnumerable<string> targetData_RenameFiles = null, bool? targetData_CaseSensitive = null, string targetData_SearchString = null, bool? targetData_ShowHiddenItems = null, bool? targetData_ShowFileExtension = null, System.Collections.Generic.IEnumerable<FileManagerDirectoryContent> targetData_Data = null, FileManagerDirectoryContent targetData_TargetData = null, bool? targetData_Permission_Copy = null, bool? targetData_Permission_Download = null, bool? targetData_Permission_Write = null, bool? targetData_Permission_WriteContents = null, bool? targetData_Permission_Read = null, bool? targetData_Permission_Upload = null, string targetData_Permission_Message = null, bool? permission_Copy = null, bool? permission_Download = null, bool? permission_Write = null, bool? permission_WriteContents = null, bool? permission_Read = null, bool? permission_Upload = null, string permission_Message = null, System.Collections.Generic.IEnumerable<FileParameter> uploadFiles = null, System.Collections.Generic.IEnumerable<FileParameter> targetData_UploadFiles = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var boundary_ = System.Guid.NewGuid().ToString();
+                    var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
+                    content_.Headers.Remove("Content-Type");
+                    content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
+
+                    if (uploadFiles == null)
+                        throw new System.ArgumentNullException("uploadFiles");
+                    else
+                    {
+                        foreach (var item_ in uploadFiles)
+                        {
+                            var content_uploadFiles_ = new System.Net.Http.StreamContent(item_.Data);
+                            if (!string.IsNullOrEmpty(item_.ContentType))
+                                content_uploadFiles_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(item_.ContentType);
+                            content_.Add(content_uploadFiles_, "UploadFiles", item_.FileName ?? "UploadFiles");
+                        }
+                    }
+
+                    if (targetData_UploadFiles == null)
+                        throw new System.ArgumentNullException("targetData_UploadFiles");
+                    else
+                    {
+                        foreach (var item_ in targetData_UploadFiles)
+                        {
+                            var content_targetData_UploadFiles_ = new System.Net.Http.StreamContent(item_.Data);
+                            if (!string.IsNullOrEmpty(item_.ContentType))
+                                content_targetData_UploadFiles_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(item_.ContentType);
+                            content_.Add(content_targetData_UploadFiles_, "TargetData.UploadFiles", item_.FileName ?? "TargetData.UploadFiles");
+                        }
+                    }
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/AzureProvider/AzureGetImage"
+                    urlBuilder_.Append("api/AzureProvider/AzureGetImage");
+                    urlBuilder_.Append('?');
+                    if (path != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Path")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(path, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (action != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Action")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(action, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (newName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("NewName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(newName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (names != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Names") + "=");
+                        foreach (var item_ in names)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (name != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Name")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (size != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Size")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(size, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (previousName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("PreviousName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(previousName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (dateModified != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DateModified")).Append('=').Append(System.Uri.EscapeDataString(dateModified.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (dateCreated != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("DateCreated")).Append('=').Append(System.Uri.EscapeDataString(dateCreated.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (hasChild != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("HasChild")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(hasChild, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (isFile != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("IsFile")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(isFile, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (type != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Type")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(type, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (filterPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("FilterPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(filterPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (filterId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("FilterId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(filterId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (parentId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ParentId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(parentId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (renameFiles != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("RenameFiles") + "=");
+                        foreach (var item_ in renameFiles)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (caseSensitive != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("CaseSensitive")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(caseSensitive, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (searchString != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("SearchString")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(searchString, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showHiddenItems != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowHiddenItems")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showHiddenItems, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (showFileExtension != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ShowFileExtension")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(showFileExtension, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (data != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Data") + "=");
+                        foreach (var item_ in data)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_Path != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Path")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Path, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Action != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Action")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Action, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_NewName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.NewName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_NewName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Names != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Names") + "=");
+                        foreach (var item_ in targetData_Names)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_Name != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Name")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Name, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Size != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Size")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Size, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_PreviousName != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.PreviousName")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_PreviousName, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_DateModified != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.DateModified")).Append('=').Append(System.Uri.EscapeDataString(targetData_DateModified.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_DateCreated != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.DateCreated")).Append('=').Append(System.Uri.EscapeDataString(targetData_DateCreated.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_HasChild != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.HasChild")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_HasChild, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_IsFile != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.IsFile")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_IsFile, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Type != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Type")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Type, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_FilterPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.FilterPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_FilterPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_FilterId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.FilterId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_FilterId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_ParentId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.ParentId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_ParentId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_TargetPath != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.TargetPath")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_TargetPath, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_RenameFiles != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.RenameFiles") + "=");
+                        foreach (var item_ in targetData_RenameFiles)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_CaseSensitive != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.CaseSensitive")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_CaseSensitive, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_SearchString != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.SearchString")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_SearchString, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_ShowHiddenItems != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.ShowHiddenItems")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_ShowHiddenItems, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_ShowFileExtension != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.ShowFileExtension")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_ShowFileExtension, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Data != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Data") + "=");
+                        foreach (var item_ in targetData_Data)
+                        {
+                            urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append(",");
+                        }
+                        urlBuilder_.Length--;
+                        urlBuilder_.Append("&");
+                    }
+                    if (targetData_TargetData != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.TargetData")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_TargetData, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Copy != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Copy")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Copy, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Download != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Download")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Download, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Write != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Write")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Write, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_WriteContents != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.WriteContents")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_WriteContents, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Read != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Read")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Read, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Upload != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Upload")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Upload, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (targetData_Permission_Message != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("TargetData.Permission.Message")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(targetData_Permission_Message, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Copy != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Copy")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Copy, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Download != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Download")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Download, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Write != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Write")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Write, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_WriteContents != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.WriteContents")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_WriteContents, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Read != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Read")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Read, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Upload != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Upload")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Upload, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (permission_Message != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("Permission.Message")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(permission_Message, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -3435,6 +4377,363 @@ namespace imediatus.Blazor.Infrastructure.Api
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> TestAllAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/Test"
+                    urlBuilder_.Append("api/Test");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<string>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task TestPOSTAsync(string body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/Test"
+                    urlBuilder_.Append("api/Test");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<string> TestGETAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/Test/{id}"
+                    urlBuilder_.Append("api/Test/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task TestPUTAsync(int id, string body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/Test/{id}"
+                    urlBuilder_.Append("api/Test/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task TestDELETEAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+
+                    // Operation Path: "api/Test/{id}"
+                    urlBuilder_.Append("api/Test/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Creates a todo item
         /// </summary>
@@ -5459,6 +6758,33 @@ namespace imediatus.Blazor.Infrastructure.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AccessPermission
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("copy")]
+        public bool Copy { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("download")]
+        public bool Download { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("write")]
+        public bool Write { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("writeContents")]
+        public bool WriteContents { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("read")]
+        public bool Read { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("upload")]
+        public bool Upload { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        public string Message { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ActivateTenantResponse
     {
 
@@ -5684,6 +7010,9 @@ namespace imediatus.Blazor.Infrastructure.Api
         [System.Text.Json.Serialization.JsonPropertyName("reporterId")]
         public System.Guid? ReporterId { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("attachments")]
+        public System.Collections.Generic.ICollection<UploadBlobCommand> Attachments { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -5779,6 +7108,90 @@ namespace imediatus.Blazor.Infrastructure.Api
 
         [System.Text.Json.Serialization.JsonPropertyName("status")]
         public string Status { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FileManagerDirectoryContent
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("path")]
+        public string Path { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("action")]
+        public string Action { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("newName")]
+        public string NewName { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("names")]
+        public System.Collections.Generic.ICollection<string> Names { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("size")]
+        public long Size { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("previousName")]
+        public string PreviousName { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("dateModified")]
+        public System.DateTimeOffset DateModified { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("dateCreated")]
+        public System.DateTimeOffset DateCreated { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("hasChild")]
+        public bool HasChild { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isFile")]
+        public bool IsFile { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("filterPath")]
+        public string FilterPath { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("filterId")]
+        public string FilterId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("parentId")]
+        public string ParentId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("targetPath")]
+        public string TargetPath { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("renameFiles")]
+        public System.Collections.Generic.ICollection<string> RenameFiles { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("uploadFiles")]
+        public System.Collections.Generic.ICollection<byte[]> UploadFiles { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("caseSensitive")]
+        public bool CaseSensitive { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("searchString")]
+        public string SearchString { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("showHiddenItems")]
+        public bool ShowHiddenItems { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("showFileExtension")]
+        public bool ShowFileExtension { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("data")]
+        public System.Collections.Generic.ICollection<FileManagerDirectoryContent> Data { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("targetData")]
+        public FileManagerDirectoryContent TargetData { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("permission")]
+        public AccessPermission Permission { get; set; }
 
     }
 
@@ -6500,6 +7913,33 @@ namespace imediatus.Blazor.Infrastructure.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UploadBlobCommand
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("containerId")]
+        public System.Guid ContainerId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("fileName")]
+        public string FileName { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("extension")]
+        public string Extension { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("contentType")]
+        public string ContentType { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("data")]
+        public byte[] Data { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("url")]
+        public string Url { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("path")]
+        public string Path { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UserDetail
     {
 
@@ -6548,6 +7988,33 @@ namespace imediatus.Blazor.Infrastructure.Api
         [System.Text.Json.Serialization.JsonPropertyName("enabled")]
         public bool Enabled { get; set; }
 
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FileParameter
+    {
+        public FileParameter(System.IO.Stream data)
+            : this(data, null, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName)
+            : this(data, fileName, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName, string contentType)
+        {
+            Data = data;
+            FileName = fileName;
+            ContentType = contentType;
+        }
+
+        public System.IO.Stream Data { get; private set; }
+
+        public string FileName { get; private set; }
+
+        public string ContentType { get; private set; }
     }
 
 

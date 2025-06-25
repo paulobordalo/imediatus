@@ -1,5 +1,6 @@
 ﻿using imediatus.Blazor.Infrastructure.Preferences;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace imediatus.Blazor.Client.Layout;
@@ -24,7 +25,6 @@ public partial class MainLayout
             _isDarkMode = preferences.IsDarkMode;
         }
     }
-
     private Task<MudBlazor.IDialogReference> OpenDialogAsync()
     {
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true };
