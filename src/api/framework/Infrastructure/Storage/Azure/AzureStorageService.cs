@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using imediatus.Framework.Core.Identity.Users.Abstractions;
@@ -7,6 +8,7 @@ using imediatus.Framework.Core.Storage.Azure.Features.DownloadBlob;
 using imediatus.Framework.Core.Storage.Azure.Features.SearchBlob;
 using imediatus.Framework.Core.Storage.Azure.Features.UploadBlob;
 using imediatus.Shared.Extensions;
+using imediatus.Shared.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace imediatus.Framework.Infrastructure.Storage.Azure;
@@ -26,8 +28,8 @@ public class AzureStorageService : IStorageAzureService
 
     public async Task CreateBlobRootAsync(CancellationToken cancellationToken = default)
     {
-        BlobContainerClient container = await _blobServiceClient.CreateBlobContainerAsync(_currentUser.GetTenant(), PublicAccessType.BlobContainer, cancellationToken: cancellationToken);
-        await container.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_currentUser.GetTenant());
+        await containerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer, cancellationToken: cancellationToken);
     }
 
     public async Task CreateBlobFolderAsync(string folderName, CancellationToken cancellationToken = default)
@@ -44,16 +46,26 @@ public class AzureStorageService : IStorageAzureService
         try
         { 
             BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_currentUser.GetTenant());
-            await containerClient.CreateIfNotExistsAsync(PublicAccessType.None, cancellationToken: cancellationToken);
+            await containerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer, cancellationToken: cancellationToken);
 
             string fullBlobName = $"{request.ContainerId.ToString().TrimEnd('/')}/{request.FileName}";
 
             // Cria o blob client
             var blobClient = containerClient.GetBlobClient(fullBlobName);
 
-            // Faz upload do ficheiro (sobrescreve se já existir)
-            await blobClient.UploadAsync(new BinaryData(request.Data), true, cancellationToken);
+            Stream fileStream = request.Base64Content.String64ToStream();
 
+            // Faz upload do ficheiro (sobrescreve se já existir)
+            var httpHeaders = new BlobHttpHeaders
+            {
+                ContentType = string.IsNullOrEmpty(request.ContentType) ? BlobContentType.DetectContentType(request.FileName, fileStream) : request.ContentType
+            };
+
+            await blobClient.UploadAsync(fileStream, new BlobUploadOptions
+            {
+                HttpHeaders = httpHeaders
+            }, cancellationToken);
+            
             return new UploadBlobResponse(true);
         }
         catch (Exception ex)

@@ -10,6 +10,10 @@
 
   <ItemGroup>
     <PackageReference Include="Ardalis.SmartEnum" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" />
+    <PackageReference Include="Mime-Detective" />
+    <PackageReference Include="Mime-Detective.Definitions.Exhaustive" />
+    <PackageReference Include="MimeTypesMap" />
   </ItemGroup>
 
 </Project>

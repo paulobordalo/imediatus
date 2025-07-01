@@ -1,6 +1,9 @@
-﻿using imediatus.Blazor.Infrastructure.Preferences;
+﻿using imediatus.Blazor.Client.Pages.Identity.Users;
+using imediatus.Blazor.Infrastructure.Auth;
+using imediatus.Blazor.Infrastructure.Preferences;
+using imediatus.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
 namespace imediatus.Blazor.Client.Layout;
@@ -14,11 +17,30 @@ public partial class MainLayout
     [Parameter]
     public EventCallback<bool> OnRightToLeftToggle { get; set; }
 
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+
+    [Inject]
+    protected IAuthenticationService AuthService { get; set; } = default!;
+
+    protected UserInfo _loggedUser;
+
     private bool _drawerOpen;
     private bool _isDarkMode;
 
     protected override async Task OnInitializedAsync()
     {
+
+        var user = (await AuthState).User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            _loggedUser = new UserInfo()
+            {
+                Name = user.GetFullName() ?? string.Empty,
+                UserId = user.GetUserId() ?? string.Empty
+            };
+        }
+
         if (await ClientPreferences.GetPreference() is ClientPreference preferences)
         {
             _drawerOpen = preferences.IsDrawerOpen;
@@ -29,7 +51,9 @@ public partial class MainLayout
     {
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true };
 
-        return DialogService.ShowAsync<Components.Dialogs.Portfolio>("Portfolio Dialog", options);
+        var parameters = new DialogParameters { { "LoggedUser", _loggedUser } };
+
+        return DialogService.ShowAsync<Components.Dialogs.Portfolio>("Portfolio Dialog", parameters, options);
     }
 
 

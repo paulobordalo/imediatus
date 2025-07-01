@@ -7011,7 +7011,7 @@ namespace imediatus.Blazor.Infrastructure.Api
         public System.Guid? ReporterId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("attachments")]
-        public System.Collections.Generic.ICollection<UploadBlobCommand> Attachments { get; set; }
+        public System.Collections.Generic.ICollection<PortfolioAttachment> Attachments { get; set; }
 
     }
 
@@ -7276,6 +7276,21 @@ namespace imediatus.Blazor.Infrastructure.Api
 
         [System.Text.Json.Serialization.JsonPropertyName("orderBy")]
         public System.Collections.Generic.ICollection<string> OrderBy { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PortfolioAttachment
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("fileName")]
+        public string FileName { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("base64Content")]
+        public string Base64Content { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("contentType")]
+        public string ContentType { get; set; }
 
     }
 
@@ -7909,33 +7924,6 @@ namespace imediatus.Blazor.Infrastructure.Api
 
         [System.Text.Json.Serialization.JsonPropertyName("tenant")]
         public string Tenant { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class UploadBlobCommand
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("containerId")]
-        public System.Guid ContainerId { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("fileName")]
-        public string FileName { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("extension")]
-        public string Extension { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("contentType")]
-        public string ContentType { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("data")]
-        public byte[] Data { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("url")]
-        public string Url { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("path")]
-        public string Path { get; set; }
 
     }
 

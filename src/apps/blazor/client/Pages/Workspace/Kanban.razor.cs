@@ -2,10 +2,13 @@
 using imediatus.Blazor.Client.Components.Dialogs;
 using imediatus.Blazor.Client.Components.EntityTable;
 using imediatus.Blazor.Infrastructure.Api;
+using imediatus.Blazor.Infrastructure.Auth;
 using imediatus.Blazor.Infrastructure.Helpers;
+using imediatus.Shared.Authorization;
 using imediatus.Shared.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
 namespace imediatus.Blazor.Client.Pages.Workspace;
@@ -15,9 +18,19 @@ public partial class Kanban
     [Inject]
     protected IApiClient _client { get; set; } = default!;
 
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+
     bool success;
     string[] errors = { };
     MudForm form;
+
+    protected UserInfo _loggedUser;
+    private string? UserId { get; set; }
+    private string? Email { get; set; }
+    private string? FullName { get; set; }
+    private string? ImageUri { get; set; }
+
 
     private MudDropContainer<PortfolioItem> _dropContainer;
 
@@ -25,6 +38,9 @@ public partial class Kanban
 
     protected override async Task OnInitializedAsync()
     {
+        // Load user data
+        await LoadUserData();
+
         var portfolioFilter = new SearchPortfoliosCommand
         {
             PageSize = 50
@@ -72,7 +88,10 @@ public partial class Kanban
     private async Task AddPortfolioAsync()
     {
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true };
-        var dialog = await DialogService.ShowAsync<Components.Dialogs.Portfolio>("Portfolio Dialog", options);
+
+        var parameters = new DialogParameters { { "LoggedUser", _loggedUser } };
+
+        var dialog = await DialogService.ShowAsync<Components.Dialogs.Portfolio>("Portfolio Dialog", parameters, options);
         var result = await dialog.Result;
         if (!result!.Canceled)
         {
@@ -103,4 +122,26 @@ public partial class Kanban
             _dropContainer.Refresh();
         }
     }
+
+    private async Task LoadUserData()
+    {
+        var user = (await AuthState).User;
+        if (user.Identity?.IsAuthenticated == true && string.IsNullOrEmpty(UserId))
+        {
+            _loggedUser = new UserInfo()
+            {
+                Name = user.GetFullName() ?? string.Empty,
+                UserId = user.GetUserId() ?? string.Empty
+            };
+            FullName = user.GetFullName();
+            UserId = user.GetUserId();
+            Email = user.GetEmail();
+            if (user.GetImageUrl() != null)
+            {
+                ImageUri = user.GetImageUrl()!.ToString();
+            }
+            StateHasChanged();
+        }
+    }
+
 }

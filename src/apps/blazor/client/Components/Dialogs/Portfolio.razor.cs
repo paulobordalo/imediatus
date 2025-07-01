@@ -1,19 +1,16 @@
-﻿using BlazorJS;
-using FluentValidation;
+﻿using FluentValidation;
 using imediatus.Blazor.Client.Components.EntityTable;
 using imediatus.Blazor.Infrastructure.Api;
 using imediatus.Blazor.Infrastructure.Auth;
-using imediatus.Shared.Authorization;
 using imediatus.Shared.Enums;
+using imediatus.Shared.Extensions;
 using Mapster;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions.Components;
-using Newtonsoft.Json;
-using static imediatus.Blazor.Client.Pages.Workspace.Kanban;
+
 
 namespace imediatus.Blazor.Client.Components.Dialogs;
 
@@ -22,32 +19,42 @@ public partial class Portfolio
     [Parameter]
     public Guid Id { get; set; }
 
+    [Parameter] 
+    public required UserInfo LoggedUser { get; set; }
+
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance? MudDialog { get; set; }
 
     [Inject]
-    protected IApiClient _client { get; set; } = default!;
+    protected IApiClient Client { get; set; } = default!;
 
     [Inject]
     protected IJSRuntime JsRuntime { get; set; } = default!;
 
-    [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; } = default!;
-
-    [Inject]
-    protected IAuthenticationService AuthService { get; set; } = default!;
-
     private MudForm _form;
     private readonly List<CostCenterResponse> _costCenters = new List<CostCenterResponse>();
-    private readonly List<UserDetail> _users = new List<UserDetail>();
+    private readonly List<UserDetail> _users = [];
     private readonly List<PortfolioPriority> _priorities = [.. PortfolioPriority.List.OrderBy(o => o.Value)];
     private readonly List<PortfolioClassification> _classifications = [.. PortfolioClassification.List.OrderBy(o => o.Value)];
     private bool _saving = false;
+    private bool _assigneeSet = false;
     private PortfolioModel _portfolioModel = new();
-    private FileModelFluentValidator ValidationRules = new();
+    private FileModelFluentValidator _validationRules = new();
 
     protected override async Task OnInitializedAsync()
     {
+        #region Utilizadores
+
+        if (await ApiHelper.ExecuteCallGuardedAsync(() => Client.GetUsersListEndpointAsync(), Toast, Navigation) is ICollection<UserDetail> users)
+        {
+            foreach (var user in users)
+            {
+                _users.Add(new UserDetail() { Id = user.Id, Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, PhoneNumber = user.PhoneNumber, UserName = user.UserName, IsActive = user.IsActive });
+            }
+        }
+
+        #endregion Utilizadores
+
         #region CostCenters
 
         var costCenterFilter = new SearchCostCentersCommand
@@ -55,7 +62,7 @@ public partial class Portfolio
             PageSize = 50
         };
 
-        if (await ApiHelper.ExecuteCallGuardedAsync(() => _client.SearchCostCentersEndpointAsync("1", costCenterFilter), Toast, Navigation) is CostCenterResponsePagedList response)
+        if (await ApiHelper.ExecuteCallGuardedAsync(() => Client.SearchCostCentersEndpointAsync("1", costCenterFilter), Toast, Navigation) is CostCenterResponsePagedList response)
         {
             var costCenters = response.Adapt<PaginationResponse<CostCenterResponse>>();
 
@@ -66,33 +73,22 @@ public partial class Portfolio
         }
 
         #endregion CostCenters
+    }
 
-        #region Utilizadores
-
-        if (await ApiHelper.ExecuteCallGuardedAsync(() => _client.GetUsersListEndpointAsync(), Toast, Navigation) is ICollection<UserDetail> users)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_assigneeSet && _users?.Count > 0 && LoggedUser != null)
         {
-            foreach (var user in users)
-            {
-                _users.Add(new UserDetail() { Id = user.Id, Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, PhoneNumber = user.PhoneNumber, UserName = user.UserName, IsActive = user.IsActive });
-            }
+            SetReporterToLoggedUser();
+            _assigneeSet = true;
         }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
-        var userLogged = (await AuthState).User;
-        if (userLogged.Identity?.IsAuthenticated == true)
-        {
-            var userIdString = userLogged.GetUserId()?.ToString();
-            if (!string.IsNullOrEmpty(userIdString))
-            {
-                var userDetail = _users.FirstOrDefault(w => w.Id.Equals(new Guid(userIdString)));
-                if (userDetail != null)
-                {
-                    _portfolioModel.Reporter = userDetail;
-                    _portfolioModel.Assignee = userDetail;
-                }
-            }
-        }
-
-        #endregion Utilizadores
+    private void SetReporterToLoggedUser()
+    {
+        var selectedUser = _users.FirstOrDefault(u => u.Id == new Guid(LoggedUser.UserId));
+        _portfolioModel.Reporter = selectedUser ?? new UserDetail { Id = new Guid(LoggedUser.UserId) };
     }
 
     private async Task SaveAsync()
@@ -101,8 +97,7 @@ public partial class Portfolio
         await _form.Validate();
         if (_form.IsValid)
         {
-
-            CreatePortfolioCommand request = new CreatePortfolioCommand()
+            CreatePortfolioCommand request = new()
             {
                 AssigneeId = _portfolioModel.Assignee.Id,
                 ClassificationId = _portfolioModel.Classification.Value,
@@ -111,37 +106,29 @@ public partial class Portfolio
                 Summary = _portfolioModel.Summary,
                 StatusId = _portfolioModel.Status.Value,
                 ReporterId = _portfolioModel.Reporter.Id,
-                Attachments = _portfolioModel.Files.Select(file => new UploadBlobCommand
+                Attachments = [.. _portfolioModel.Files.Select(file => new PortfolioAttachment
                 {
                     FileName = file.FileName,
-                    Extension = file.Extension,
-                    ContentType = file.ContentType,
-                    Data = file.Data,
-                    Url = file.Url,
-                    Path = file.Path
-                }).ToList()
+                    Base64Content = file.Data.ToBase64(),
+                    ContentType = file.ContentType
+                })]
             };
 
-            foreach (var file in request.Attachments)
-            {
-                Toast.Add("Conteúdo do attachment " + file.FileName, MudBlazor.Severity.Info);
-            }
-
-            if (await ApiHelper.ExecuteCallGuardedAsync(() => _client.CreatePortfolioEndpointAsync("1", request), Toast))
+            if (MudDialog != null && await ApiHelper.ExecuteCallGuardedAsync(() => Client.CreatePortfolioEndpointAsync("1", request), Toast))
             {
                 Toast.Add("Portfolio created successfully.", MudBlazor.Severity.Success);
+                MudDialog.Close(DialogResult.Ok(_portfolioModel));
             }
+            else
+            { 
+                Toast.Add("Failed to create portfolio.", MudBlazor.Severity.Error);
+            }
+        }
 
-            _saving = false;
-            MudDialog.Close(DialogResult.Ok(_portfolioModel));
-        }
-        else
-        {
-            _saving = false;
-        }
+        _saving = false;
     }
 
-    public class PortfolioModel
+    internal class PortfolioModel
     {
         public string Summary { get; set; }
         public PortfolioStatus Status { get; set; } = PortfolioStatus.ToDo;
@@ -169,11 +156,13 @@ public partial class Portfolio
             RuleFor(x => x.Classification)
             .NotEmpty();
             RuleFor(x => x.Assignee)
-            .NotEmpty();
+            .NotEmpty()
+            .Must(assignee => assignee.Id != Guid.Empty).WithMessage("Assignee must be a valid user.");
             RuleFor(x => x.File)
             .NotEmpty();
             RuleFor(x => x.Files)
-                .NotEmpty();
+                .NotEmpty()
+                .Must(files => files.Count > 0).WithMessage("At least one file must be uploaded.");
             When(x => x.File != null, () =>
             {
                 RuleFor(x => x.File.Size).LessThanOrEqualTo(10485760).WithMessage("The maximum file size is 10 MB");

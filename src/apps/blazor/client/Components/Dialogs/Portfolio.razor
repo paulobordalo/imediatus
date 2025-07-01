@@ -11,7 +11,7 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudForm @ref="_form" Model="@_portfolioModel" Validation="@(ValidationRules.ValidateValue)" ValidationDelay="0">
+        <MudForm @ref="_form" Model="@_portfolioModel" Validation="@(_validationRules.ValidateValue)" ValidationDelay="0">
             <MudGrid>
                 <MudItem xs="12" md="12">
                     <MudChip T="string" Label="true">To Do</MudChip>
@@ -87,6 +87,7 @@
                 <MudExUploadEdit T="UploadableFile"
                                  Variant="Variant.Outlined"
                                  For="@(() => _portfolioModel.Files)"
+                                 DropZoneClickAction="DropZoneClickAction.UploadFile"
                                  TextUploadFile="Click here to upload files"
                                  TextDropZone="Drag and Drop files here"
                                  Label="Add files"

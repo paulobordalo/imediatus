@@ -6,7 +6,7 @@ public class UploadBlobValidator : AbstractValidator<UploadBlobCommand>
 {
     public UploadBlobValidator()
     {
-        RuleFor(p => p.Data)
+        RuleFor(p => p.Base64Content)
             .NotNull()
             .NotEmpty();
 

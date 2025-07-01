@@ -25,7 +25,7 @@ internal static class Extension
             builder.AddBlobServiceClient(config.GetConnectionString("AzureBlobStorage"));
 
             // Use DefaultAzureCredential by default
-            builder.UseCredential(new DefaultAzureCredential());
+            //builder.UseCredential(new DefaultAzureCredential());
 
             // Set up any default settings
             builder.ConfigureDefaults(config.GetSection("AzureDefaults"));

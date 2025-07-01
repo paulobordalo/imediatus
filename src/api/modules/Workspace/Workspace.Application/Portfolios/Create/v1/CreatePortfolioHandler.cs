@@ -3,6 +3,7 @@ using imediatus.Framework.Core.Persistence;
 using imediatus.Framework.Core.Storage.Azure;
 using imediatus.Framework.Core.Storage.Azure.Features.UploadBlob;
 using imediatus.Shared.Enums;
+using imediatus.Shared.Extensions;
 using imediatus.WebApi.Workspace.Domain.Models;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,12 +30,12 @@ public sealed class CreatePortfolioHandler(
             foreach (var file in request.Attachments)
             {
                 // Assuming UploadBlobCommand constructor takes file details
-                await storageAzureService.UploadBlobsAsync(new UploadBlobCommand(entity.Id, file.FileName, file.Extension, file.ContentType, file.Data, file.Url, file.Path), cancellationToken);
+                await storageAzureService.UploadBlobsAsync(new UploadBlobCommand(entity.Id, file.FileName, file.Base64Content, file.ContentType), cancellationToken);
             }
 
             logger.LogInformation("Uploads completed for portfolio {Id}", entity.Id);
         }
-
+        
         return new CreatePortfolioResponse(entity.Id);
     }
 }

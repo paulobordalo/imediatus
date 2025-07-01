@@ -16,4 +16,15 @@ public static class StringExtensions
         byte[] bytes = Convert.FromBase64String(base64);
         return new MemoryStream(bytes);
     }
+
+    public static byte[] FromBase64ToBytes(this string base64String)
+    {
+        ArgumentNullException.ThrowIfNull(base64String);
+
+        var base64 = base64String.Contains(',', StringComparison.Ordinal)
+            ? base64String[(base64String.IndexOf(',', StringComparison.Ordinal) + 1)..]
+            : base64String;
+
+        return Convert.FromBase64String(base64);
+    }
 }

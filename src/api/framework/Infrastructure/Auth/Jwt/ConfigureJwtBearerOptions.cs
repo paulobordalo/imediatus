@@ -49,7 +49,9 @@ public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions
             OnChallenge = context =>
             {
                 context.HandleResponse();
-                return !context.Response.HasStarted ? throw new UnauthorizedException() : Task.CompletedTask;
+                return !context.Response.HasStarted
+                    ? Task.FromException(new UnauthorizedException())
+                    : Task.CompletedTask;
             },
             OnForbidden = _ => throw new ForbiddenException(),
             OnMessageReceived = context =>
