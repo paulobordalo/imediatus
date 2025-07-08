@@ -1,4 +1,6 @@
-﻿using imediatus.Blazor.Client.Pages.Identity.Users;
+﻿using imediatus.Blazor.Client.Components;
+using imediatus.Blazor.Client.Pages.Identity.Users;
+using imediatus.Blazor.Infrastructure.Api;
 using imediatus.Blazor.Infrastructure.Auth;
 using imediatus.Blazor.Infrastructure.Preferences;
 using imediatus.Shared.Authorization;
@@ -23,6 +25,7 @@ public partial class MainLayout
     [Inject]
     protected IAuthenticationService AuthService { get; set; } = default!;
 
+
     protected UserInfo _loggedUser;
 
     private bool _drawerOpen;
@@ -30,30 +33,38 @@ public partial class MainLayout
 
     protected override async Task OnInitializedAsync()
     {
-
-        var user = (await AuthState).User;
-        if (user.Identity?.IsAuthenticated == true)
-        {
-            _loggedUser = new UserInfo()
-            {
-                Name = user.GetFullName() ?? string.Empty,
-                UserId = user.GetUserId() ?? string.Empty
-            };
-        }
-
         if (await ClientPreferences.GetPreference() is ClientPreference preferences)
         {
             _drawerOpen = preferences.IsDrawerOpen;
             _isDarkMode = preferences.IsDarkMode;
         }
     }
-    private Task<MudBlazor.IDialogReference> OpenDialogAsync()
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var userLogged = (await AuthState).User;
+            if (userLogged.Identity?.IsAuthenticated == true)
+            {
+                _loggedUser = new UserInfo()
+                {
+                    Name = userLogged.GetFullName() ?? string.Empty,
+                    UserId = userLogged.GetUserId() ?? string.Empty
+                };
+            }
+        }
+    }
+
+
+    private async Task<MudBlazor.IDialogReference> OpenDialogAsync()
     {
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true };
 
-        var parameters = new DialogParameters { { "LoggedUser", _loggedUser } };
+        var parameters = new DialogParameters { {"LoggedUser", _loggedUser} };
 
-        return DialogService.ShowAsync<Components.Dialogs.Portfolio>("Portfolio Dialog", parameters, options);
+        return await DialogService.ShowAsync<Components.Dialogs.CreatePortfolio>("Portfolio Dialog", parameters, options);
     }
 
 

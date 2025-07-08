@@ -91,7 +91,7 @@ public partial class Kanban
 
         var parameters = new DialogParameters { { "LoggedUser", _loggedUser } };
 
-        var dialog = await DialogService.ShowAsync<Components.Dialogs.Portfolio>("Portfolio Dialog", parameters, options);
+        var dialog = await DialogService.ShowAsync<Components.Dialogs.CreatePortfolio>("Portfolio Dialog", parameters, options);
         var result = await dialog.Result;
         if (!result!.Canceled)
         {

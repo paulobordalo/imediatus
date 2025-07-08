@@ -11,16 +11,13 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions.Components;
 
-
 namespace imediatus.Blazor.Client.Components.Dialogs;
 
-public partial class Portfolio
+public partial class CreatePortfolio
 {
-    [Parameter]
-    public Guid Id { get; set; }
-
     [Parameter] 
     public required UserInfo LoggedUser { get; set; }
+
 
     [CascadingParameter]
     private IMudDialogInstance? MudDialog { get; set; }
@@ -32,7 +29,7 @@ public partial class Portfolio
     protected IJSRuntime JsRuntime { get; set; } = default!;
 
     private MudForm _form;
-    private readonly List<CostCenterResponse> _costCenters = new List<CostCenterResponse>();
+    private readonly List<CostCenterResponse> _costCenters = [];
     private readonly List<UserDetail> _users = [];
     private readonly List<PortfolioPriority> _priorities = [.. PortfolioPriority.List.OrderBy(o => o.Value)];
     private readonly List<PortfolioClassification> _classifications = [.. PortfolioClassification.List.OrderBy(o => o.Value)];
