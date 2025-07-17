@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Extensions;
+using MudBlazor.Extensions.CodeGator.Adapter;
+using MudBlazor.Extensions.Helper;
 using MudBlazor.Services;
 using MudExtensions.Services;
 using Syncfusion.Blazor;
@@ -23,7 +25,6 @@ public static class Extensions
         //Register SyncFusion License
         SyncfusionLicenseProvider.RegisterLicense("MzI1NzE1QDMxMzgyZTMzMmUzMENleXlYTEFVbmRwY05jK0VzT0lhSXkvK2liSWlUcDBXbjFDbkJzYkZ4eFk9"); // 18.3.0.53
         services.AddSyncfusionBlazor();
-
         services.AddMudServices(configuration =>
         {
             configuration.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
@@ -33,7 +34,8 @@ public static class Extensions
             configuration.SnackbarConfiguration.ShowCloseIcon = false;
         });
         // use this to add MudServices and the MudBlazor.Extensions
-        services.AddMudServicesWithExtensions(); 
+        services.AddMudServicesWithExtensions();
+        services.AddMudExObjectEditCGBlazorFormsAdapter();
         services.AddMudExtensions();
         services.AddBlazoredLocalStorage();
         services.AddAuthentication(config);

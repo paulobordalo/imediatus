@@ -9,18 +9,19 @@
     <IsPackable>true</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="CodeBeam.MudBlazor.Extensions" Version="8.2.3" />
+    <PackageVersion Include="CodeBeam.MudBlazor.Extensions" Version="8.2.4" />
     <PackageVersion Include="FluentValidation" Version="11.11.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageVersion Include="MediatR.Courier" Version="7.0.1" />
-    <PackageVersion Include="MudBlazor.Extensions" Version="8.8.0" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.12.0.118525" />
+    <PackageVersion Include="MudBlazor.Extensions" Version="8.9.0" />
+    <PackageVersion Include="MudExObjectEdit.CodeGatorAdapter" Version="8.0.1" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.14.0.120626" />
     <PackageVersion Include="MediatR" Version="13.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.7" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.4" PrivateAssets="all" />
     <PackageVersion Include="Blazored.LocalStorage" Version="4.5.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.6" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.7" />
     <PackageVersion Include="MudBlazor" Version="8.9.0" />
     <PackageVersion Include="Syncfusion.Blazor" Version="18.3.0.53" />
   </ItemGroup>

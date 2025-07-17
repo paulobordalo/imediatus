@@ -1,11 +1,9 @@
-﻿using imediatus.Blazor.Client.Components;
-using imediatus.Blazor.Client.Pages.Identity.Users;
-using imediatus.Blazor.Infrastructure.Api;
-using imediatus.Blazor.Infrastructure.Auth;
+﻿using imediatus.Blazor.Infrastructure.Auth;
 using imediatus.Blazor.Infrastructure.Preferences;
 using imediatus.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace imediatus.Blazor.Client.Layout;
@@ -25,7 +23,6 @@ public partial class MainLayout
     [Inject]
     protected IAuthenticationService AuthService { get; set; } = default!;
 
-
     protected UserInfo _loggedUser;
 
     private bool _drawerOpen;
@@ -39,7 +36,6 @@ public partial class MainLayout
             _isDarkMode = preferences.IsDarkMode;
         }
     }
-
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

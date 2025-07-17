@@ -24,6 +24,7 @@
 		<PackageReference Include="Microsoft.Extensions.Http" />
 		<PackageReference Include="MudBlazor" />
 		<PackageReference Include="MudBlazor.Extensions" />
+		<PackageReference Include="MudExObjectEdit.CodeGatorAdapter" />
 		<PackageReference Include="Syncfusion.Blazor" />
 	</ItemGroup>
 

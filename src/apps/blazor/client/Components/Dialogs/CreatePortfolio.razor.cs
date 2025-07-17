@@ -7,9 +7,9 @@ using imediatus.Shared.Extensions;
 using Mapster;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions.Components;
+
 
 namespace imediatus.Blazor.Client.Components.Dialogs;
 
@@ -24,9 +24,6 @@ public partial class CreatePortfolio
 
     [Inject]
     protected IApiClient Client { get; set; } = default!;
-
-    [Inject]
-    protected IJSRuntime JsRuntime { get; set; } = default!;
 
     private MudForm _form;
     private readonly List<CostCenterResponse> _costCenters = [];
