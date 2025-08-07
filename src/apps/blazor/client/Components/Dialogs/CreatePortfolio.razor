@@ -69,6 +69,19 @@
                     <MudSelectExtended T="UserDetail" @bind-Value="_portfolioModel.Assignee" For="@(() => _portfolioModel.Assignee)" ItemCollection="_users" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Assignee" AnchorOrigin="Origin.BottomCenter">
                         <ItemTemplate>
                             <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                                <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+                                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                        <MudStack Row="true">
+                                            <MudText>@context?.Value?.FirstName</MudText>
+                                        </MudStack>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </ItemTemplate>
+                    </MudSelectExtended>
+                    @*                     <MudSelectExtended T="UserDetail" @bind-Value="_portfolioModel.Assignee" For="@(() => _portfolioModel.Assignee)" ItemCollection="_users" ValuePresenter="ValuePresenter.ItemContent" MultiSelection="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" Label="Assignee" AnchorOrigin="Origin.BottomCenter">
+                        <ItemTemplate>
+                            <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
                                 <MudText><b>@string.Concat(@context?.Value?.LastName, ", ", @context?.Value?.FirstName)</b></MudText>
                                 <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                                     <MudStack Row="true">
@@ -80,11 +93,12 @@
                             </MudStack>
                         </ItemTemplate>
                     </MudSelectExtended>
-                </MudItem>
+ *@                </MudItem>
                 <MudItem xs="12" md="12">
                     @* <FileExplorerManager ContainerId="@Id" IsNewFolder="true" IsUpload="true" IsDownload="true" IsRename="true" IsDelete="true" /> *@
 
-                <MudExUploadEdit T="UploadableFile"
+                <MudExUploadEdit 
+                                 T="UploadableFile"
                                  Variant="Variant.Outlined"
                                  For="@(() => _portfolioModel.Files)"
                                  DropZoneClickAction="DropZoneClickAction.UploadFile"

@@ -34,6 +34,7 @@ public static class Extensions
         {
             cfg.RegisterServicesFromAssemblies(assemblies);
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            cfg.LicenseKey = "eyJhbGciOiJSUzI1NiIsImtpZCI6Ikx1Y2t5UGVubnlTb2Z0d2FyZUxpY2Vuc2VLZXkvYmJiMTNhY2I1OTkwNGQ4OWI0Y2IxYzg1ZjA4OGNjZjkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2x1Y2t5cGVubnlzb2Z0d2FyZS5jb20iLCJhdWQiOiJMdWNreVBlbm55U29mdHdhcmUiLCJleHAiOiIxNzg1NTQyNDAwIiwiaWF0IjoiMTc1NDA2MTk3NCIsImFjY291bnRfaWQiOiIwMTk4NjYzZDM0NTk3ZDU1ODc2NzgyODgwMTViZDE0NSIsImN1c3RvbWVyX2lkIjoiY3RtXzAxazFrM3ZiNjFyZzFwbjMxZXhoM2twYmc0Iiwic3ViX2lkIjoiLSIsImVkaXRpb24iOiIwIiwidHlwZSI6IjIifQ.m9zjJWHp1z_5eQ05X5iun_YnwtVMmE-7LY8giFfGmk8hQplpHln0itSSUv9Nmxyd5pksRwrWLzLXxSxIefG7ROybhrmKjYddrB_sai0velmYnbxnVhO2f6GBuKxQbJAmMLD0s8Pzjs0JKgdANhpONj2zOSm24eb1OttMnu5KLhZH7iNfow3DL0wNzwrQoLsrQ9Nh0DE8WZ-XeIaPeTAnLdBwCCTWOpvQRAKoH5QFd2pQeWiInh26c0kh02ostyFv_OorkkOZkVckhMqhUoZ6Lgr4a1-EyVGeNgEXsR6k9LVOo3CcCSEvl0FJ4it8OlzvYv0JTEqchHOIJoCXDXWTtA";
         });
 
         //register module services

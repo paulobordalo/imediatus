@@ -67,6 +67,8 @@ public partial class CreatePortfolio
         }
 
         #endregion CostCenters
+
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

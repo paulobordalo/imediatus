@@ -5,18 +5,18 @@ using imediatus.Blazor.Infrastructure.Auth;
 using imediatus.Blazor.Infrastructure.Auth.Jwt;
 using imediatus.Blazor.Infrastructure.Notifications;
 using imediatus.Blazor.Infrastructure.Preferences;
+using imediatus.Blazor.Infrastructure.State;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.CodeGator.Adapter;
-using MudBlazor.Extensions.Helper;
-using MudBlazor.Services;
 using MudExtensions.Services;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 
 namespace imediatus.Blazor.Infrastructure;
+
 public static class Extensions
 {
     private const string ClientName = "imediatus.API";
@@ -25,7 +25,7 @@ public static class Extensions
         //Register SyncFusion License
         SyncfusionLicenseProvider.RegisterLicense("MzI1NzE1QDMxMzgyZTMzMmUzMENleXlYTEFVbmRwY05jK0VzT0lhSXkvK2liSWlUcDBXbjFDbkJzYkZ4eFk9"); // 18.3.0.53
         services.AddSyncfusionBlazor();
-        services.AddMudServices(configuration =>
+        services.AddMudServicesWithExtensions(configuration =>
         {
             configuration.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
             configuration.SnackbarConfiguration.HideTransitionDuration = 100;
@@ -33,8 +33,6 @@ public static class Extensions
             configuration.SnackbarConfiguration.VisibleStateDuration = 3000;
             configuration.SnackbarConfiguration.ShowCloseIcon = false;
         });
-        // use this to add MudServices and the MudBlazor.Extensions
-        services.AddMudServicesWithExtensions();
         services.AddMudExObjectEditCGBlazorFormsAdapter();
         services.AddMudExtensions();
         services.AddBlazoredLocalStorage();
@@ -51,6 +49,8 @@ public static class Extensions
            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName));
         services.AddTransient<IClientPreferenceManager, ClientPreferenceManager>();
         services.AddTransient<IPreference, ClientPreference>();
+        services.AddSingleton<AppState>();
+        services.AddStates();
         services.AddNotifications();
         return services;
 
