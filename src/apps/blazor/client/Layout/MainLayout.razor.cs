@@ -27,7 +27,7 @@ public partial class MainLayout
             _isDarkMode = preferences.IsDarkMode;
         }
 
-        await AppState.InitializeAsync();
+//        await AppState.InitializeAsync();
     }
 
     private async Task<MudBlazor.IDialogReference> OpenDialogAsync()
