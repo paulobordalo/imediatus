@@ -1,0 +1,30 @@
+image: alpine/git:latest
+
+options:
+  # evita logs gigantes
+  max-time: 15
+
+pipelines:
+  default:
+    - step:
+        name: Mirror to GitHub
+        script:
+          # 1) Garantir known_hosts (caso não tenha adicionado nos settings)
+          - mkdir -p ~/.ssh
+          - ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
+          # 2) Clonar o próprio repositório do Bitbucket em modo espelho
+          #    BITBUCKET_GIT_SSH_ORIGIN é fornecida pelo Pipelines e aponta para o repo atual (via SSH)
+          - git clone --mirror "$BITBUCKET_GIT_SSH_ORIGIN" repo.git
+          - cd repo.git
+
+          # 3) Adicionar remoto GitHub
+          - git remote add github "${GITHUB_SSH_REPO:-git@github.com:paulobordalo/imediatus.git}"
+
+          # 4) (Opcional) Se usar Git LFS, ative e empurre tudo também
+          # - apk add --no-cache git-lfs && git lfs install
+          # - git lfs fetch --all
+          # - git lfs push --all github
+
+          # 5) Enviar tudo (branches + tags). ATENÇÃO: --mirror pode sobrescrever refs do GitHub.
+          - git push --mirror github
