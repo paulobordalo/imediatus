@@ -1,7 +1,6 @@
 image: alpine/git:latest
 
 options:
-  # evita logs gigantes
   max-time: 15
 
 pipelines:
@@ -9,22 +8,18 @@ pipelines:
     - step:
         name: Mirror to GitHub
         script:
-          # 1) Garantir known_hosts (caso não tenha adicionado nos settings)
+          # 0) Garantir known_hosts do GitHub (evita prompt de fingerprint)
           - mkdir -p ~/.ssh
           - ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
-          # 2) Clonar o próprio repositório do Bitbucket em modo espelho
-          #    BITBUCKET_GIT_SSH_ORIGIN é fornecida pelo Pipelines e aponta para o repo atual (via SSH)
-          - git clone --mirror "$BITBUCKET_GIT_SSH_ORIGIN" repo.git
-          - cd repo.git
+          # 1) Estamos já no checkout do repo (feito pelo Pipelines).
+          #    Precisamos garantir que temos TODAS as refs (branches/tags), não apenas shallow.
+          - if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then git fetch --unshallow --tags; fi
+          - git fetch --all --tags --prune
 
-          # 3) Adicionar remoto GitHub
+          # 2) Adicionar remoto GitHub (pode usar variável ou hardcode)
+          - git remote remove github 2>/dev/null || true
           - git remote add github "${GITHUB_SSH_REPO:-git@github.com:paulobordalo/imediatus.git}"
 
-          # 4) (Opcional) Se usar Git LFS, ative e empurre tudo também
-          # - apk add --no-cache git-lfs && git lfs install
-          # - git lfs fetch --all
-          # - git lfs push --all github
-
-          # 5) Enviar tudo (branches + tags). ATENÇÃO: --mirror pode sobrescrever refs do GitHub.
+          # 3) Push espelho (ATENÇÃO: --mirror sincroniza/apaga refs para refletir exatamente o Bitbucket)
           - git push --mirror github
