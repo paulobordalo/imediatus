@@ -5,7 +5,6 @@ using imediatus.Blazor.Infrastructure.Auth;
 using imediatus.Blazor.Infrastructure.Auth.Jwt;
 using imediatus.Blazor.Infrastructure.Notifications;
 using imediatus.Blazor.Infrastructure.Preferences;
-using imediatus.Blazor.Infrastructure.State;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -49,8 +48,6 @@ public static class Extensions
            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName));
         services.AddTransient<IClientPreferenceManager, ClientPreferenceManager>();
         services.AddTransient<IPreference, ClientPreference>();
-        services.AddSingleton<AppState>();
-        services.AddStates();
         services.AddNotifications();
         return services;
 

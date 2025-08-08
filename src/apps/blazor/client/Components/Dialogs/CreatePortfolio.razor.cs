@@ -53,7 +53,7 @@ public partial class CreatePortfolio
 
         var costCenterFilter = new SearchCostCentersCommand
         {
-            PageSize = 50
+            PageSize = int.MaxValue
         };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(() => Client.SearchCostCentersEndpointAsync("1", costCenterFilter), Toast, Navigation) is CostCenterResponsePagedList response)
@@ -67,8 +67,6 @@ public partial class CreatePortfolio
         }
 
         #endregion CostCenters
-
-        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

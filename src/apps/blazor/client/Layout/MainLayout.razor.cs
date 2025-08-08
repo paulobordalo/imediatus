@@ -1,5 +1,4 @@
 ﻿using imediatus.Blazor.Infrastructure.Preferences;
-using imediatus.Blazor.Infrastructure.State;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -13,8 +12,6 @@ public partial class MainLayout
     public EventCallback<bool> OnDarkModeToggle { get; set; }
     [Parameter]
     public EventCallback<bool> OnRightToLeftToggle { get; set; }
-    [Inject]
-    protected AppState AppState { get; set; }
 
     private bool _drawerOpen;
     private bool _isDarkMode;
@@ -26,8 +23,6 @@ public partial class MainLayout
             _drawerOpen = preferences.IsDrawerOpen;
             _isDarkMode = preferences.IsDarkMode;
         }
-
-//        await AppState.InitializeAsync();
     }
 
     private async Task<MudBlazor.IDialogReference> OpenDialogAsync()
