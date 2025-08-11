@@ -6,10 +6,8 @@ using imediatus.Shared.Enums;
 using imediatus.Shared.Extensions;
 using Mapster;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using MudBlazor.Extensions.Components;
-
 
 namespace imediatus.Blazor.Client.Components.Dialogs;
 
@@ -18,11 +16,10 @@ public partial class CreatePortfolio
     [Parameter] 
     public required UserInfo LoggedUser { get; set; }
 
-
-    [CascadingParameter]
+    [CascadingParameter] 
     private IMudDialogInstance? MudDialog { get; set; }
 
-    [Inject]
+    [Inject] 
     protected IApiClient Client { get; set; } = default!;
 
     private MudForm _form;
@@ -37,140 +34,129 @@ public partial class CreatePortfolio
 
     protected override async Task OnInitializedAsync()
     {
-        #region Utilizadores
-
-        if (await ApiHelper.ExecuteCallGuardedAsync(() => Client.GetUsersListEndpointAsync(), Toast, Navigation) is ICollection<UserDetail> users)
+        // Users
+        if (await ApiHelper.ExecuteCallGuardedAsync(() => Client.GetUsersListEndpointAsync(), Toast, Navigation)
+            is ICollection<UserDetail> users)
         {
-            foreach (var user in users)
-            {
-                _users.Add(new UserDetail() { Id = user.Id, Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, PhoneNumber = user.PhoneNumber, UserName = user.UserName, IsActive = user.IsActive });
-            }
+            _users.AddRange(users);
+            SetAssigneeReporter();
         }
 
-        #endregion Utilizadores
-
-        #region CostCenters
-
-        var costCenterFilter = new SearchCostCentersCommand
-        {
-            PageSize = int.MaxValue
-        };
-
-        if (await ApiHelper.ExecuteCallGuardedAsync(() => Client.SearchCostCentersEndpointAsync("1", costCenterFilter), Toast, Navigation) is CostCenterResponsePagedList response)
+        // Cost Centers
+        var costCenterFilter = new SearchCostCentersCommand { PageSize = int.MaxValue };
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => Client.SearchCostCentersEndpointAsync("1", costCenterFilter), Toast, Navigation)
+            is CostCenterResponsePagedList response)
         {
             var costCenters = response.Adapt<PaginationResponse<CostCenterResponse>>();
-
-            foreach (var costCenter in costCenters.Items)
-            {
-                _costCenters.Add(new CostCenterResponse() { Id = costCenter.Id.HasValue ? costCenter.Id.Value : Guid.NewGuid(), Name = costCenter.Name });
-            }
+            foreach (var cc in costCenters.Items.Where(c => c.Id.HasValue))
+                _costCenters.Add(new CostCenterResponse { Id = cc.Id!.Value, Name = cc.Name });
         }
-
-        #endregion CostCenters
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected void SetAssigneeReporter()
     {
-        if (!_assigneeSet && _users?.Count > 0 && LoggedUser != null)
+        if (!_assigneeSet && _users.Count > 0 && LoggedUser is not null)
         {
-            SetReporterToLoggedUser();
+            if (Guid.TryParse(LoggedUser.UserId, out var uid))
+            {
+                var me = _users.FirstOrDefault(u => u.Id == uid);
+                if (me != null)
+                {
+                    _portfolioModel.Reporter ??= me;
+                    _portfolioModel.Assignee ??= me;
+                }
+            }
             _assigneeSet = true;
         }
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
-    private void SetReporterToLoggedUser()
-    {
-        var selectedUser = _users.FirstOrDefault(u => u.Id == new Guid(LoggedUser.UserId));
-        _portfolioModel.Reporter = selectedUser ?? new UserDetail { Id = new Guid(LoggedUser.UserId) };
     }
 
     private async Task SaveAsync()
     {
         _saving = true;
         await _form.Validate();
-        if (_form.IsValid)
-        {
-            CreatePortfolioCommand request = new()
-            {
-                AssigneeId = _portfolioModel.Assignee.Id,
-                ClassificationId = _portfolioModel.Classification.Value,
-                CostCenterId = _portfolioModel.CostCenter?.Id,
-                PriorityId = _portfolioModel.Priority.Value,
-                Summary = _portfolioModel.Summary,
-                StatusId = _portfolioModel.Status.Value,
-                ReporterId = _portfolioModel.Reporter.Id,
-                Attachments = [.. _portfolioModel.Files.Select(file => new PortfolioAttachment
-                {
-                    FileName = file.FileName,
-                    Base64Content = file.Data.ToBase64(),
-                    ContentType = file.ContentType
-                })]
-            };
+        if (!_form.IsValid) { _saving = false; return; }
 
-            if (MudDialog != null && await ApiHelper.ExecuteCallGuardedAsync(() => Client.CreatePortfolioEndpointAsync("1", request), Toast))
+        var request = new CreatePortfolioCommand
+        {
+            AssigneeId = _portfolioModel.Assignee!.Id,
+            ClassificationId = _portfolioModel.Classification.Value,
+            CostCenterId = _portfolioModel.CostCenter?.Id,
+            PriorityId = _portfolioModel.Priority.Value,
+            Summary = _portfolioModel.Summary,
+            StatusId = _portfolioModel.Status.Value,
+            ReporterId = _portfolioModel.Reporter!.Id,
+            Attachments = _portfolioModel.Files.Select(file => new PortfolioAttachment
             {
-                Toast.Add("Portfolio created successfully.", MudBlazor.Severity.Success);
-                MudDialog.Close(DialogResult.Ok(_portfolioModel));
-            }
-            else
-            { 
-                Toast.Add("Failed to create portfolio.", MudBlazor.Severity.Error);
-            }
+                FileName = file.FileName,
+                Base64Content = file.Data.ToBase64(),
+                ContentType = file.ContentType
+            }).ToList()
+        };
+
+        if (MudDialog != null && await ApiHelper.ExecuteCallGuardedAsync(
+                () => Client.CreatePortfolioEndpointAsync("1", request), Toast))
+        {
+            Toast.Add("Portfolio created successfully.", MudBlazor.Severity.Success);
+            MudDialog.Close(DialogResult.Ok(_portfolioModel));
+        }
+        else
+        {
+            Toast.Add("Failed to create portfolio.", MudBlazor.Severity.Error);
         }
 
         _saving = false;
     }
 
+    private readonly Converter<UserDetail> _userConverter = new()
+    {
+        SetFunc = u => u is null ? string.Empty : $"{u.LastName}, {u.FirstName}"
+        // GetFunc não é necessário para MudSelect (seleção é por instância)
+    };
+
     internal class PortfolioModel
     {
-        public string Summary { get; set; }
+        public string Summary { get; set; } = string.Empty;
         public PortfolioStatus Status { get; set; } = PortfolioStatus.ToDo;
         public PortfolioPriority Priority { get; set; } = PortfolioPriority.Medium;
         public PortfolioClassification Classification { get; set; } = PortfolioClassification.Public;
         public CostCenterResponse? CostCenter { get; set; }
-        public UserDetail Assignee { get; set; }
-        public UserDetail Reporter { get; set; }
-        public IBrowserFile File { get; set; }
-        public IList<UploadableFile> Files { get; set; } = [];
+        public UserDetail? Assignee { get; set; }
+        public UserDetail? Reporter { get; set; }
+        public IList<UploadableFile> Files { get; set; } = new List<UploadableFile>();
     }
 
-    /// <summary>
-    /// A standard AbstractValidator which contains multiple rules and can be shared with the back end API
-    /// </summary>
     internal class FileModelFluentValidator : AbstractValidator<PortfolioModel>
     {
         public FileModelFluentValidator()
         {
-            RuleFor(x => x.Summary)
-                .NotEmpty()
-                .Length(1, 128);
-            RuleFor(x => x.Priority)
-            .NotEmpty();
-            RuleFor(x => x.Classification)
-            .NotEmpty();
+            RuleFor(x => x.Summary).NotEmpty().Length(1, 128);
+            RuleFor(x => x.Priority).IsInEnum();
+            RuleFor(x => x.Classification).IsInEnum();
+            RuleFor(x => x.Status).IsInEnum();
+
             RuleFor(x => x.Assignee)
-            .NotEmpty()
-            .Must(assignee => assignee.Id != Guid.Empty).WithMessage("Assignee must be a valid user.");
-            RuleFor(x => x.File)
-            .NotEmpty();
+                .NotNull().WithMessage("Assignee is required.")
+                .Must(a => a is not null && a.Id != Guid.Empty)
+                .WithMessage("Assignee must be a valid user.");
+
+            RuleFor(x => x.Reporter)
+                .NotNull().WithMessage("Reporter is required.")
+                .Must(r => r is not null && r.Id != Guid.Empty)
+                .WithMessage("Reporter must be a valid user.");
+
             RuleFor(x => x.Files)
-                .NotEmpty()
-                .Must(files => files.Count > 0).WithMessage("At least one file must be uploaded.");
-            When(x => x.File != null, () =>
-            {
-                RuleFor(x => x.File.Size).LessThanOrEqualTo(10485760).WithMessage("The maximum file size is 10 MB");
-            });
+                .NotNull().WithMessage("Please upload at least one file.")
+                .Must(files => files is { Count: > 0 })
+                .WithMessage("At least one file must be uploaded.");
         }
+
         public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
         {
-            var result = await ValidateAsync(ValidationContext<PortfolioModel>.CreateWithOptions((PortfolioModel)model, x => x.IncludeProperties(propertyName)));
-            if (result.IsValid)
-                return Array.Empty<string>();
-            return result.Errors.Select(e => e.ErrorMessage);
+            var result = await ValidateAsync(
+                ValidationContext<PortfolioModel>.CreateWithOptions(
+                    (PortfolioModel)model, x => x.IncludeProperties(propertyName)));
+            return result.IsValid ? Array.Empty<string>() : result.Errors.Select(e => e.ErrorMessage);
         };
     }
-
-
 }
-

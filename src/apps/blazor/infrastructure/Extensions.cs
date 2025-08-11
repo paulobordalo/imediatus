@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Extensions.CodeGator.Adapter;
-using MudExtensions.Services;
+using MudBlazor.Services;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 
@@ -24,7 +24,7 @@ public static class Extensions
         //Register SyncFusion License
         SyncfusionLicenseProvider.RegisterLicense("MzI1NzE1QDMxMzgyZTMzMmUzMENleXlYTEFVbmRwY05jK0VzT0lhSXkvK2liSWlUcDBXbjFDbkJzYkZ4eFk9"); // 18.3.0.53
         services.AddSyncfusionBlazor();
-        services.AddMudServicesWithExtensions(configuration =>
+        services.AddMudServices(configuration =>
         {
             configuration.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
             configuration.SnackbarConfiguration.HideTransitionDuration = 100;

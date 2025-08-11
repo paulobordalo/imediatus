@@ -10,7 +10,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Blazored.LocalStorage" />
-		<PackageReference Include="CodeBeam.MudBlazor.Extensions" />
 		<PackageReference Include="MediatR" />
 		<PackageReference Include="MediatR.Courier" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
