@@ -5,6 +5,7 @@ using imediatus.Blazor.Infrastructure.Auth;
 using imediatus.Blazor.Infrastructure.Auth.Jwt;
 using imediatus.Blazor.Infrastructure.Notifications;
 using imediatus.Blazor.Infrastructure.Preferences;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -42,6 +43,7 @@ public static class Extensions
             client.DefaultRequestHeaders.AcceptLanguage.Clear();
             client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
             client.BaseAddress = new Uri(config["ApiBaseUrl"]!);
+            client.Timeout = TimeSpan.FromHours(2);
         })
            .AddHttpMessageHandler<JwtAuthenticationHeaderHandler>()
            .Services
@@ -49,6 +51,10 @@ public static class Extensions
         services.AddTransient<IClientPreferenceManager, ClientPreferenceManager>();
         services.AddTransient<IPreference, ClientPreference>();
         services.AddNotifications();
+        services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 5L * 1024 * 1024 * 1024; // 5 GB
+        });
         return services;
 
     }

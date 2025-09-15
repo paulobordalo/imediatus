@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using imediatus.Framework.Core.Storage;
 using imediatus.Framework.Core.Storage.Azure;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
