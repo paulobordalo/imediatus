@@ -19,6 +19,7 @@
     <PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.4.2" />
     <PackageVersion Include="Aspire.Microsoft.Data.SqlClient" Version="9.4.2" />
     <PackageVersion Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.4.2" />
+    <PackageVersion Include="Azure.Core" Version="1.48.0" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.25.0" />
     <PackageVersion Include="Finbuckle.MultiTenant" Version="9.4.0" />
     <PackageVersion Include="Finbuckle.MultiTenant.AspNetCore" Version="9.4.0" />

@@ -36,26 +36,40 @@ public static class Extensions
         services.AddMudExObjectEditCGBlazorFormsAdapter();
         services.AddMudExtensions();
         services.AddBlazoredLocalStorage();
+
         services.AddAuthentication(config);
-        services.AddTransient<IApiClient, ApiClient>();
+
+        // HttpClient nomeado com BaseAddress seguro (fallback local se não houver ApiBaseUrl)
         services.AddHttpClient(ClientName, client =>
         {
             client.DefaultRequestHeaders.AcceptLanguage.Clear();
             client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-            client.BaseAddress = new Uri(config["ApiBaseUrl"]!);
+            var apiBaseUrl = config["ApiBaseUrl"] ?? "https://localhost:7000/";
+            client.BaseAddress = new Uri(apiBaseUrl, UriKind.Absolute);
             client.Timeout = TimeSpan.FromHours(2);
         })
-           .AddHttpMessageHandler<JwtAuthenticationHeaderHandler>()
-           .Services
-           .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName));
+        .AddHttpMessageHandler<JwtAuthenticationHeaderHandler>()
+        .Services
+        .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName));
+
+        // REGISTO CORRETO DO ApiClient (evita resolver string pelo DI)
+        services.AddScoped<IApiClient>(sp =>
+        {
+            var http = sp.GetRequiredService<HttpClient>();
+            var cfg = sp.GetRequiredService<IConfiguration>();
+            var baseUrl = cfg["ApiBaseUrl"] ?? http.BaseAddress?.ToString() ?? "https://localhost:7000/";
+            return new ApiClient(baseUrl, http);
+        });
+
         services.AddTransient<IClientPreferenceManager, ClientPreferenceManager>();
         services.AddTransient<IPreference, ClientPreference>();
         services.AddNotifications();
+
         services.Configure<FormOptions>(options =>
         {
             options.MultipartBodyLengthLimit = 5L * 1024 * 1024 * 1024; // 5 GB
         });
-        return services;
 
+        return services;
     }
 }

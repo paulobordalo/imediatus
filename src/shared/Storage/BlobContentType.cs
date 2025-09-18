@@ -1,5 +1,4 @@
-﻿using imediatus.Shared.Extensions;
-using Microsoft.AspNetCore.StaticFiles;
+﻿using Microsoft.AspNetCore.StaticFiles;
 using MimeDetective;
 using HeyRed.Mime;
 
@@ -17,14 +16,14 @@ public static class BlobContentType
             return contentType;
         }
 
-        // 2. Se não conseguir, tenta pela extensão do ficheiro
+        // 2. Se não conseguir, tenta pelo MimeTypesMap
         string mimeType = MimeTypesMap.GetMimeType(fileName);
         if (!string.IsNullOrEmpty(mimeType))
         {
             return mimeType;
         }
 
-        // 4. Usa Mime-Detective para detetar o content-type
+        // 3. Usa Mime-Detective para detetar o content-type
         var inspector = new ContentInspectorBuilder
         {
             Definitions = MimeDetective.Definitions.DefaultDefinitions.All()
@@ -32,10 +31,10 @@ public static class BlobContentType
 
         var results = inspector.Inspect(fileStream);
 
-        // 5. Tenta obter o content-type a partir dos resultados
+        // Tenta obter o content-type a partir dos resultados
         var mime = results.ByMimeType().FirstOrDefault()?.MimeType;
 
-        // 6. Se nada detetado, usa o default
+        // 4. Se nada detetado, usa o default
         return mime ?? "application/octet-stream";
     }
 }

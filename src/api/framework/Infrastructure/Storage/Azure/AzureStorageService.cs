@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Concurrent;
 using System.Text;
+using Azure;
+using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using imediatus.Framework.Core.Identity.Users.Abstractions;
@@ -41,38 +43,110 @@ public class AzureStorageService : IStorageAzureService
         await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes("This is a auto generated file")), new BlobHttpHeaders { ContentType = "text/plain" }, cancellationToken: cancellationToken);
     }
 
-    public async Task<UploadBlobResponse> UploadBlobsAsync(UploadBlobCommand request, CancellationToken cancellationToken = default)
+    public async Task<UploadBlobResponse> UploadBlobsAsync(
+        UploadBlobCommand request,
+        CancellationToken cancellationToken = default)
     {
+        var uploaded = new ConcurrentBag<UploadedBlob>();
+        var errors = new ConcurrentBag<UploadError>();
+
         try
-        { 
-            BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_currentUser.GetTenant());
+        {
+            var tenant = _currentUser.GetTenant();
+            var containerClient = _blobServiceClient.GetBlobContainerClient(tenant);
             await containerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer, cancellationToken: cancellationToken);
 
-            string fullBlobName = $"{request.ContainerId.ToString().TrimEnd('/')}/{request.FileName}";
+            var files = request.Files?.ToList() ?? new List<UploadBlobFile>();
+            if (files.Count == 0)
+                return new UploadBlobResponse(true, Array.Empty<UploadedBlob>(), Array.Empty<UploadError>());
 
-            // Cria o blob client
-            var blobClient = containerClient.GetBlobClient(fullBlobName);
+            const long FiveGb = 5L * 1024 * 1024 * 1024; // 5 GB
+            // Evite paralelismo exagerado quando já recebe byte[] em memória.
+            const int filesParallelism = 4;
 
-            Stream fileStream = request.Base64Content.String64ToStream();
+            await Parallel.ForEachAsync(
+                files,
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = filesParallelism,
+                    CancellationToken = cancellationToken
+                },
+                async (file, ct) =>
+                {
+                    var safeFileName = Path.GetFileName(file.FileName);
+                    var blobName = $"{request.PortfolioId:D}/{safeFileName}";
+                    var blobClient = containerClient.GetBlobClient(blobName);
 
-            // Faz upload do ficheiro (sobrescreve se já existir)
-            var httpHeaders = new BlobHttpHeaders
-            {
-                ContentType = string.IsNullOrEmpty(request.ContentType) ? BlobContentType.DetectContentType(request.FileName, fileStream) : request.ContentType
-            };
+                    try
+                    {
 
-            await blobClient.UploadAsync(fileStream, new BlobUploadOptions
-            {
-                HttpHeaders = httpHeaders
-            }, cancellationToken);
-            
-            return new UploadBlobResponse(true);
+                        byte[] fileByte = file.FileData.FromBase64ToBytes();
+
+                        // 1) Validação de tamanho (com byte[])
+                        var length = (long)fileByte.LongLength;
+                        if (length > FiveGb)
+                        {
+                            errors.Add(new UploadError(file.FileName, $"File exceeds 5 GB limit ({length} bytes)."));
+                            return;
+                        }
+
+                        // Como recebemos byte[], subimos via Stream para aproveitar o chunking.
+                        using var fileStream = new MemoryStream(fileByte, writable: false);
+                        fileStream.Position = 0;
+
+                        // 2) Content-Type (deteta se vier vazio)
+                        string contentType;
+                        if (string.IsNullOrWhiteSpace(file.ContentType))
+                        {
+                            contentType = BlobContentType.DetectContentType(file.FileName, fileStream);
+                            if (string.IsNullOrWhiteSpace(contentType))
+                                contentType = "application/octet-stream";
+                        }
+                        else
+                        {
+                            contentType = file.ContentType;
+                        }
+
+                        // 3) Opções de transferência (chunking) — relevantes quando o SDK lê de Stream.
+                        var transfer = new StorageTransferOptions
+                        {
+                            MaximumConcurrency = 4,
+                            InitialTransferSize = 64 * 1024 * 1024, // 64 MB
+                            MaximumTransferSize = 64 * 1024 * 1024  // 64 MB
+                        };
+
+                        var options = new BlobUploadOptions
+                        {
+                            HttpHeaders = new BlobHttpHeaders { ContentType = contentType },
+                            TransferOptions = transfer
+                        };
+
+
+                        await blobClient.UploadAsync(fileStream, options, ct);
+
+                        uploaded.Add(new UploadedBlob(file.FileName, blobName, blobClient.Uri));
+                        _logger.LogInformation("Uploaded blob {BlobName} (tenant {Tenant}).", blobName, tenant);
+                    }
+                    catch (RequestFailedException ex) // namespace Azure
+                    {
+                        errors.Add(new UploadError(file.FileName, ex.Message));
+                        _logger.LogError(ex,
+                            "Error uploading blob {BlobName} (tenant {Tenant}, portfolio {PortfolioId}).",
+                            blobName, tenant, request.PortfolioId);
+                    }
+                });
+
+            var success = errors.IsEmpty;
+            return new UploadBlobResponse(success, uploaded.ToList(), errors.ToList());
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex,
+                "Fatal failure uploading blobs (tenant {Tenant}, portfolio {PortfolioId}).",
+                _currentUser.GetTenant(), request.PortfolioId);
 
-            _logger.LogError(ex, "Failed to upload blob for container {ContainerId} and file {FileName}", request.ContainerId, request.FileName);
-            return new UploadBlobResponse(false);
+            return new UploadBlobResponse(false, uploaded.ToList(),
+                errors.Concat(new[] { new UploadError("*", ex.Message) }).ToList());
         }
     }
 

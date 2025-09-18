@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Net.Http.Headers;
+using FluentValidation;
 using imediatus.Blazor.Client.Components.EntityTable;
 using imediatus.Blazor.Infrastructure.Api;
 using imediatus.Blazor.Infrastructure.Auth;
@@ -22,6 +23,9 @@ public partial class CreatePortfolio
     [Inject] 
     protected IApiClient Client { get; set; } = default!;
 
+    [Inject]
+    protected HttpClient Http { get; set; } = default!;
+    
     private MudForm _form;
     private readonly List<CostCenterResponse> _costCenters = [];
     private readonly List<UserDetail> _users = [];
@@ -86,26 +90,42 @@ public partial class CreatePortfolio
             Summary = _portfolioModel.Summary,
             StatusId = _portfolioModel.Status.Value,
             ReporterId = _portfolioModel.Reporter!.Id,
-            Attachments = _portfolioModel.Files.Select(file => new PortfolioAttachment
+            Attachments = [.. _portfolioModel.Files.Select(f => new UploadBlobFile
             {
-                FileName = file.FileName,
-                Base64Content = file.Data.ToBase64(),
-                ContentType = file.ContentType
-            }).ToList()
+                FileName = f.FileName,
+                FileData = f.Data.ToBase64(),
+                ContentType = f.ContentType
+            })]
         };
 
-        if (MudDialog != null && await ApiHelper.ExecuteCallGuardedAsync(
-                () => Client.CreatePortfolioEndpointAsync("1", request), Toast))
+        try
         {
-            Toast.Add("Portfolio created successfully.", MudBlazor.Severity.Success);
-            MudDialog.Close(DialogResult.Ok(_portfolioModel));
-        }
-        else
-        {
-            Toast.Add("Failed to create portfolio.", MudBlazor.Severity.Error);
-        }
+            // 1) Cria o portfólio (obter Id)
+            var createResponse = await ApiHelper.ExecuteCallGuardedAsync(
+                () => Client.CreatePortfolioEndpointAsync("1", request), Toast, Navigation);
 
-        _saving = false;
+            if (createResponse is not CreatePortfolioResponse created || created.Id == Guid.Empty)
+            {
+                Toast.Add("Failed to create portfolio.", MudBlazor.Severity.Error);
+                _saving = false;
+                return;
+            }
+
+            Toast.Add("Portfolio created successfully.", MudBlazor.Severity.Success);
+            MudDialog?.Close(DialogResult.Ok(_portfolioModel));
+        }
+        catch (ApiException apiEx)
+        {
+            Toast.Add($"Azure upload failed: {apiEx.Response}", MudBlazor.Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Toast.Add($"Upload error: {ex.Message}", MudBlazor.Severity.Error);
+        }
+        finally
+        {
+            _saving = false;
+        }
     }
 
     private readonly Converter<UserDetail> _userConverter = new()

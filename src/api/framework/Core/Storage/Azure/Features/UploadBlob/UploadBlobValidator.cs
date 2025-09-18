@@ -6,11 +6,11 @@ public class UploadBlobValidator : AbstractValidator<UploadBlobCommand>
 {
     public UploadBlobValidator()
     {
-        RuleFor(p => p.Base64Content)
+        RuleFor(p => p.PortfolioId)
             .NotNull()
             .NotEmpty();
 
-        RuleFor(p => p.FileName)
+        RuleFor(p => p.Files)
             .NotNull()
             .NotEmpty();
     }
