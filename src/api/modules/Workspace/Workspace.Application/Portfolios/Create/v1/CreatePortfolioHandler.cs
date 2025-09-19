@@ -48,7 +48,7 @@ public sealed class CreatePortfolioHandler(
                            return new UploadBlobFile(a.FileData, a.FileName, contentType);
                        })]);
 
-            await publisher.Publish(new PortfolioCreatedEvent(entity.Id, uploadables), cancellationToken);
+            await publisher.Publish(new PortfolioCreatedEvent(entity.Id.ToString(), uploadables), cancellationToken);
             logger.LogInformation("PortfolioCreatedEvent published for {Id} with {Count} attachment(s)", entity.Id, uploadables.Count);
         }
 

@@ -6,7 +6,7 @@ public class UploadBlobValidator : AbstractValidator<UploadBlobCommand>
 {
     public UploadBlobValidator()
     {
-        RuleFor(p => p.PortfolioId)
+        RuleFor(p => p.FolderName)
             .NotNull()
             .NotEmpty();
 
