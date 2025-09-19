@@ -109,8 +109,11 @@ public static class Extensions
                     .ReportApiVersions()
                     .Build();
 
-        // Map versioned endpoint
+        // Map versioned endpoint root
         app.MapGroup("api/v{version:apiVersion}").WithApiVersionSet(versions);
+
+        // Storage minimal APIs
+        app.MapAzureStorageEndpoints();
 
         return app;
     }
