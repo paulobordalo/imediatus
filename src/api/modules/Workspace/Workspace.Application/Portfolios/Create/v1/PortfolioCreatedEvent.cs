@@ -6,6 +6,6 @@ namespace imediatus.WebApi.Workspace.Application.Portfolios.Create.v1;
 
 // Event raised after the portfolio data is saved.
 public sealed record PortfolioCreatedEvent(
-    Guid PortfolioId,
+    string FolderName,
     Collection<UploadBlobFile> Attachments
 ) : INotification;

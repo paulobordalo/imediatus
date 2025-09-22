@@ -6,11 +6,11 @@ public class DownloadBlobValidator : AbstractValidator<DownloadBlobCommand>
 {
     public DownloadBlobValidator()
     {
-        RuleFor(p => p.fileName)
+        RuleFor(p => p.FolderName)
+            .NotNull();
+
+        RuleFor(p => p.FileName)
             .NotNull()
             .NotEmpty();
-
-        RuleFor(p => p.containerId)
-            .NotNull();
     }
 }
