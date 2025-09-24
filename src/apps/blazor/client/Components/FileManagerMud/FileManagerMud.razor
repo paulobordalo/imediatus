@@ -1,0 +1,285 @@
+@namespace imediatus.Blazor.Client.Components.FileManagerMud
+@using MudBlazor
+@inherits FileManagerMudBase
+
+<MudPaper Class="p-2" Elevation="0" aria-label="File Manager">
+    <!-- Toolbar -->
+    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1" Class="mb-2" aria-label="Toolbar">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CreateNewFolder"
+                   OnClick="CreateFolderAsync" Disabled="@Busy" aria-label="New Folder">
+            New Folder
+        </MudButton>
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile"
+                   OnClick="@OpenUploadDialog" Disabled="@Busy" aria-label="Upload">
+            Upload
+        </MudButton>
+
+        <MudButton Variant="Variant.Text" Color="Color.Default" StartIcon="@Icons.Material.Filled.Refresh"
+                   OnClick="ReloadAsync" Disabled="@Busy" aria-label="Refresh">
+            Refresh
+        </MudButton>
+
+        <MudMenu Label="Sort By" Color="Color.Default" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Sort" Disabled="@Busy" aria-label="Sort By">
+            <MudMenuItem OnClick="@(()=>SetSort(SortField.Name))">Name</MudMenuItem>
+            <MudMenuItem OnClick="@(()=>SetSort(SortField.Size))">Size</MudMenuItem>
+            <MudMenuItem OnClick="@(()=>SetSort(SortField.Type))">Type</MudMenuItem>
+            <MudMenuItem OnClick="@(()=>SetSort(SortField.Modified))">Modified</MudMenuItem>
+            <MudDivider />
+            <MudMenuItem OnClick="@ToggleSortDir">Toggle Asc/Desc (@(SortAscending ? "Asc" : "Desc"))</MudMenuItem>
+        </MudMenu>
+
+        <MudSwitch T="bool" @bind-Checked="GridMode" Color="Color.Primary" Class="ml-2" Label="Grid View" aria-label="Toggle Grid/List" />
+
+        <MudSpacer />
+
+        <MudTextField @bind-Value="SearchText" Placeholder="Search..." Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" DebounceInterval="300"
+                      OnKeyUp="@OnSearchKeyUp" Class="w-64" aria-label="Search files" />
+    </MudStack>
+
+    <!-- Breadcrumb -->
+    <MudBreadcrumbs Class="mb-2"
+                    MaxItems="6"
+                    CollapseIcon="@Icons.Material.Filled.MoreHoriz"
+                    Items="@_breadcrumbItems"
+                    aria-label="Breadcrumb">
+        <ItemTemplate Context="item">
+            <MudLink Href="@item.Href"
+                     Disabled="@item.Disabled"
+                     aria-label="@item.Text"
+                     OnClick="@((Microsoft.AspNetCore.Components.Web.MouseEventArgs e) => OnBreadcrumbClick(e, item))">
+                @* opcional: ícone por nível (se usares a sobrecarga com 'Icon') *@
+                @item.Text
+            </MudLink>
+        </ItemTemplate>
+    </MudBreadcrumbs>
+
+    <!-- Empty state -->
+    @if (!Busy && Items.Count == 0 && string.IsNullOrWhiteSpace(SearchText))
+    {
+        <MudPaper Class="pa-6 d-flex flex-column align-center justify-center mud-theme-primary-opacity-12" Elevation="0" Style="min-height:220px">
+            <MudIcon Icon="@Icons.Material.Filled.FolderOpen" Size="Size.Large" />
+            <MudText Typo="Typo.h6" Class="mt-2">This folder is empty</MudText>
+            <MudText Color="Color.Secondary">Use "Upload" to add files or "New Folder" to create a subfolder.</MudText>
+            <MudStack Row="true" Spacing="1" Class="mt-3">
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.UploadFile" OnClick="@OpenUploadDialog">Upload</MudButton>
+                <MudButton Color="Color.Secondary" Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.CreateNewFolder" OnClick="@CreateFolderAsync">New Folder</MudButton>
+            </MudStack>
+        </MudPaper>
+    }
+    else
+    {
+        <!-- Grid / List -->
+        @if (GridMode)
+        {
+            <MudGrid GutterSize="3">
+                @foreach (var item in Items)
+                {
+                    <MudItem xs="6" sm="4" md="3" lg="2">
+                        <MudPaper Class="p-2 hover-elevation-3" @onclick="@(()=>OnOpenAsync(item))" @oncontextmenu="@((e)=>OnContextMenu(e, item))"
+                                  Style="cursor:pointer" aria-label="File card">
+                            <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Class="mb-2" Style="height:64px">
+                                <MudIcon Icon="@GetIcon(item)" Size="Size.Large" />
+                            </MudStack>
+                            <MudText Typo="Typo.subtitle2" Truncate="true">@item.Name</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@FormatSize(item.Size)</MudText>
+                        </MudPaper>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+        else
+        {
+			<MudTable Items="Items"
+					  Hover="true"
+					  Dense="true"
+					  FixedHeader="true"
+					  Bordered="true"
+					  Elevation="0"
+					  Class="file-table"
+					  RowClassFunc="RowClass"
+					  RowStyleFunc="RowStyle"
+					  OnRowClick="@(async (MudBlazor.TableRowClickEventArgs<FileManagerItem> args) => await OnRowClick(args))">
+
+				<HeaderContent>
+					<MudTh>Name</MudTh>
+					<MudTh class="d-none d-sm-table-cell">Size</MudTh>
+					<MudTh class="d-none d-md-table-cell">Type</MudTh>
+					<MudTh class="d-none d-md-table-cell">Modified</MudTh>
+					<MudTh></MudTh>
+				</HeaderContent>
+
+				<RowTemplate>
+					<MudTd DataLabel="Name">
+						<MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+							<!-- MudCheckBox (nome correto) + binding correto -->
+							<MudCheckBox Value="@(SelectedIds.Contains(context.Id))"
+										 ValueChanged="@((bool? val) => ToggleSelection(context, val ?? false))" />
+							<MudIcon Icon="@GetIcon(context)" />
+							<MudLink OnClick="@(() => OnOpenAsync(context))">@context.Name</MudLink>
+						</MudStack>
+					</MudTd>
+
+					<MudTd DataLabel="Size" class="d-none d-sm-table-cell">@FormatSize(context.Size)</MudTd>
+					<MudTd DataLabel="Type" class="d-none d-md-table-cell">
+						@(context.IsFolder ? "Folder" : (context.ContentType ?? "-"))
+					</MudTd>
+					<MudTd DataLabel="Modified" class="d-none d-md-table-cell">
+						@FormatModified(context.Modified)
+					</MudTd>
+
+					<MudTd DataLabel="Actions">
+						<MudMenu Variant="Variant.Text"
+								 AnchorOrigin="Origin.TopLeft"
+								 TransformOrigin="Origin.TopLeft"
+								 Icon="@Icons.Material.Filled.MoreVert">
+							<MudMenuItem OnClick="@(() => OnOpenAsync(context))" Icon="@Icons.Material.Filled.OpenInNew">Open</MudMenuItem>
+							<MudMenuItem OnClick="@(() => OpenDetails(context))" Icon="@Icons.Material.Filled.Info">Details</MudMenuItem>
+							<MudMenuItem OnClick="@(() => BeginRename(context))" Icon="@Icons.Material.Filled.DriveFileRenameOutline" Disabled="@(!CanRename)">Rename</MudMenuItem>
+							<MudMenuItem OnClick="@(() => Copy(context))" Icon="@Icons.Material.Filled.ContentCopy">Copy</MudMenuItem>
+							<MudMenuItem OnClick="@(() => Cut(context))" Icon="@Icons.Material.Filled.ContentCut">Cut</MudMenuItem>
+							<MudMenuItem Disabled="@(!CanPaste)" OnClick="@Paste" Icon="@Icons.Material.Filled.ContentPaste">Paste</MudMenuItem>
+							<MudDivider />
+							<MudMenuItem OnClick="@(() => DeleteAsync(context))" Icon="@Icons.Material.Filled.DeleteForever" Class="mud-danger-text">Delete</MudMenuItem>
+						</MudMenu>
+					</MudTd>
+				</RowTemplate>
+			</MudTable>
+		}
+    }
+
+    <!-- Preview Dialog -->
+    <MudDialog @bind-IsVisible="_previewVisible" MaxWidth="MaxWidth.ExtraLarge" FullWidth="true" CloseOnEscapeKey="true" CloseButton="true">
+        <DialogContent>
+            <MudText Typo="Typo.h6">@_previewTitle</MudText>
+            @if (_previewType == PreviewType.Image && !string.IsNullOrEmpty(_previewUrl))
+            {
+                <img src="@_previewUrl" alt="preview" style="max-width:100%;max-height:70vh" />
+            }
+            else if (_previewType == PreviewType.Pdf && !string.IsNullOrEmpty(_previewUrl))
+            {
+                <iframe src="@_previewUrl" style="width:100%;height:70vh;border:0" title="PDF preview"></iframe>
+            }
+            else if ((_previewType == PreviewType.Text || _previewType == PreviewType.Json || _previewType == PreviewType.Xml || _previewType == PreviewType.Markdown) && _previewText is not null)
+            {
+                <MudPaper Class="p-2" Elevation="0" style="max-height:70vh;overflow:auto;white-space:pre-wrap">
+                    @_previewText
+                </MudPaper>
+            }
+            else
+            {
+                <MudText>No preview available.</MudText>
+            }
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="@(()=>_previewVisible=false)" Color="Color.Primary">Close</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+    <!-- Context menu (custom) -->
+    @if (ContextMenu.Visible && ContextMenu.Target is not null)
+    {
+        <div class="context-menu mud-elevation-8" style="position:fixed; z-index:1300; left:@ContextMenu.X}px; top:@ContextMenu.Y}px;"
+             @onclick:stopPropagation="true" @oncontextmenu:stopPropagation="true">
+            <MudList T="object" Dense="true">
+                <MudListItem OnClick="@(()=>OnOpenAsync(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.OpenInNew" Class="mr-2" />Open</MudListItem>
+                <MudListItem OnClick="@(()=>OpenDetails(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2" />Details</MudListItem>
+                <MudListItem Disabled="@(!CanRename)" OnClick="@(()=>BeginRename(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.DriveFileRenameOutline" Class="mr-2" />Rename</MudListItem>
+                <MudListItem OnClick="@(()=>Copy(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.ContentCopy" Class="mr-2" />Copy</MudListItem>
+                <MudListItem OnClick="@(()=>Cut(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.ContentCut" Class="mr-2" />Cut</MudListItem>
+                <MudListItem Disabled="@(!CanPaste)" OnClick="@Paste">
+                    <MudIcon Icon="@Icons.Material.Filled.ContentPaste" Class="mr-2" />Paste
+                </MudListItem>
+                <MudDivider />
+                <MudListItem Class="mud-danger-text" OnClick="@(()=>DeleteAsync(ContextMenu.Target))">
+                    <MudIcon Icon="@Icons.Material.Filled.DeleteForever" Class="mr-2" />Delete
+                </MudListItem>
+            </MudList>
+        </div>
+    }
+</MudPaper>
+
+@code {
+    // JS interop: open upload dialog (stub)
+    private async Task OpenUploadDialog()
+        => await JS.InvokeVoidAsync("fileManagerMud.openUploadDialog", DotNetObjectReference.Create(this));
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await JS.InvokeVoidAsync("fileManagerMud.initContextMenu", DotNetObjectReference.Create(this));
+    }
+
+    private string FormatModified(DateTimeOffset? modified)
+        => modified is null ? "-" : modified.Value.ToLocalTime().ToString("g");
+
+    private string FormatSize(long? size)
+    {
+        if (size is null) return "-";
+        double bytes = size.Value;
+        string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+        int order = 0;
+        while (bytes >= 1024 && order < sizes.Length - 1)
+        {
+            order++;
+            bytes /= 1024d;
+        }
+        return $"{bytes:0.#} {sizes[order]}";
+    }
+
+    // Breadcrumb backing list (MudBlazor-native items)
+    private List<MudBlazor.BreadcrumbItem> _breadcrumbItems = new();
+
+    // Build breadcrumb from CurrentPath segments
+    private void BuildBreadcrumb()
+    {
+        _breadcrumbItems = new List<MudBlazor.BreadcrumbItem>
+        {
+            new(text: "Home", href: "#/")
+        };
+
+        var agg = string.Empty;
+        foreach (var s in CurrentSegments)
+        {
+            agg = CombinePath(agg, s);
+            _breadcrumbItems.Add(new MudBlazor.BreadcrumbItem(text: s, href: "#/" + Uri.EscapeDataString(agg)));
+        }
+    }
+
+    // Handle breadcrumb click (prevent default and navigate within component)
+    private async Task OnBreadcrumbClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e, MudBlazor.BreadcrumbItem item)
+    {
+        if (item?.Href is null) return;
+
+        if (item.Href.StartsWith("#/"))
+        {
+            var path = Uri.UnescapeDataString(item.Href[2..]);
+            CurrentPath = path.Trim('/');
+            await OnPathChanged.InvokeAsync(CurrentPath);
+            BuildBreadcrumb();
+            await LoadAsync();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        BuildBreadcrumb();
+        await base.OnInitializedAsync();
+        // base.OnInitializedAsync já faz EnsureContainerAsync + LoadAsync (segundo a tua base),
+        // mas se não fizer, poderás chamar aqui explicitamente.
+    }
+
+    // Returns the icon name for a given FileManagerItem
+    private string GetIcon(FileManagerItem item)
+    {
+        if (item.IsFolder)
+            return Icons.Material.Filled.Folder;
+        if (item.ContentType?.StartsWith("image/") == true)
+            return Icons.Material.Filled.Image;
+        if (item.ContentType?.StartsWith("application/pdf") == true)
+            return Icons.Material.Filled.PictureAsPdf;
+        // Add more content type checks as needed
+        return Icons.Material.Filled.InsertDriveFile;
+    }
+}

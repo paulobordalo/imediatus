@@ -5,3 +5,35 @@
 .mud-list {
     border: 1px solid var(--mud-palette-lines-default)
 }
+
+.context-menu {
+    background: var(--mud-palette-surface);
+    border-radius: 8px;
+    min-width: 220px;
+    padding: 4px 0;
+}
+
+.file-table .mud-table-container {
+    max-height: 60vh; /* ajuste conforme layout */
+}
+
+/* Selected row look */
+.fm-row-selected {
+    background-color: rgba(25, 118, 210, 0.10); /* MudBlazor primary at ~10% */
+}
+
+/* Slightly different hue for folders (optional) */
+.fm-row-folder .mud-icon-root {
+    opacity: 0.95;
+}
+
+/* Subtle zebra striping for readability */
+.fm-row-alt {
+    background-color: rgba(0,0,0,0.02);
+}
+
+/* Optional: hover elevation effect */
+.mud-table .mud-table-body tr:hover {
+    transition: background-color .12s ease;
+    background-color: rgba(0,0,0,0.04);
+}

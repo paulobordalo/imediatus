@@ -307,8 +307,8 @@ public class AzureStorageService : IStorageAzureService
                 }
                 else
                 {
-                    var name = item.Blob.Name;
-                    var url = new Uri($"{container.Uri.AbsoluteUri}/{name}").AbsoluteUri;
+                    var name = Path.GetFileName(item.Blob.Name);
+                    var url = new Uri($"{container.Uri.AbsoluteUri}/{prefix}{name}").AbsoluteUri;
                     result.Add(new SearchBlobResponse(false, name, url, string.Empty));
                 }
             }

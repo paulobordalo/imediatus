@@ -16,4 +16,7 @@ public static class ImediatusResources
     public const string Todos = nameof(Todos);
     public const string AuditTrails = nameof(AuditTrails);
     public const string Domains = nameof(Domains);
+    public const string Containers = nameof(Containers);
+    public const string Blobs = nameof(Blobs);
+    public const string Folders = nameof(Folders);
 }

@@ -10,5 +10,8 @@ public static class ImediatusActions
     public const string Export = nameof(Export);
     public const string Generate = nameof(Generate);
     public const string Clean = nameof(Clean);
+    public const string Download = nameof(Download);
+    public const string Rename = nameof(Rename);
+    public const string Upload = nameof(Upload);
     public const string UpgradeSubscription = nameof(UpgradeSubscription);
 }

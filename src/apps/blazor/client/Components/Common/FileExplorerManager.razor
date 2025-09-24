@@ -2,10 +2,10 @@
 @using Syncfusion.Blazor.Popups
 
 <SfFileManager ID="fileManager" @ref="FileManager" AllowMultiSelection="true" ShowThumbnail="true" PopupTarget="BODY">
-    <FileManagerAjaxSettings Url="/api/FileManager/AzureFileOperations"
-                             GetImageUrl="/api/FileManager/AzureGetImage"
-                             DownloadUrl="/api/FileManager/AzureDownload"
-                             UploadUrl="/api/FileManager/AzureUpload">
+	<FileManagerAjaxSettings Url="/api/AzureProvider/AzureFileOperations"
+							 GetImageUrl="/api/AzureProvider/AzureGetImage"
+							 DownloadUrl="/api/AzureProvider/AzureDownload"
+							 UploadUrl="/api/AzureProvider/AzureUpload">
     </FileManagerAjaxSettings>
     <FileManagerToolbarSettings Items="@ToolItems?.ToArray()"></FileManagerToolbarSettings>
     <FileManagerContextMenuSettings File="@Files?.ToArray()" Folder="@Folders?.ToArray()" Layout="@Layouts?.ToArray()"></FileManagerContextMenuSettings>

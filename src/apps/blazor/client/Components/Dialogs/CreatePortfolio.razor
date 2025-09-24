@@ -1,8 +1,11 @@
-﻿@using imediatus.Blazor.Infrastructure.Helpers
+﻿@using imediatus.Blazor.Client.Components.FileManagerMud
+@using imediatus.Blazor.Infrastructure.Helpers
 @using imediatus.Shared.Enums
 @using FluentValidation
 @using BlazorJS
 @using Newtonsoft.Json
+@using Microsoft.AspNetCore.Components.Forms
+
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
@@ -123,23 +126,14 @@
                     </MudSelect>
 
                 </MudItem>
-                <MudItem xs="12" md="12">
-                    @* <FileExplorerManager ContainerId="@Id" IsNewFolder="true" IsUpload="true" IsDownload="true" IsRename="true" IsDelete="true" /> *@
 
-                    <MudExUploadEdit T="UploadableFile"
-                                     Variant="Variant.Outlined"
-                                     For="@(() => _portfolioModel.Files)"
-                                     DropZoneClickAction="DropZoneClickAction.UploadFile"
-                                     TextUploadFile="Click here to upload files"
-                                     TextDropZone="Drag and Drop files here"
-                                     Label="Add files"
-                                     ColorizeIcons="true"
-                                     MinHeight="80"
-                                     Class="MudExUploadExCustom"
-                                     AllowRename="true"
-                                     @bind-UploadRequests="_portfolioModel.Files">
-                    </MudExUploadEdit>
-                </MudItem>
+                <MudItem xs="12" md="12">
+					<FileManagerMud RootPrefix="438009c7-01b7-440b-d379-08da012d1c38"
+                    PageSize="50"
+                    MaxUploadBytes="104857600"
+                    ChunkSizeBytes="262144"
+                    MaxConcurrentUploads="3" />
+				</MudItem>
             </MudGrid>
         </MudForm>
     </DialogContent>

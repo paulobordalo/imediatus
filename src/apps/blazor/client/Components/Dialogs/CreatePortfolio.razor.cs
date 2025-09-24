@@ -9,6 +9,7 @@ using Mapster;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace imediatus.Blazor.Client.Components.Dialogs;
 
@@ -23,9 +24,8 @@ public partial class CreatePortfolio
     [Inject] 
     protected IApiClient Client { get; set; } = default!;
 
-    [Inject]
-    protected HttpClient Http { get; set; } = default!;
-    
+    private IBrowserFile[]? _selectedFiles;
+
     private MudForm _form;
     private readonly List<CostCenterResponse> _costCenters = [];
     private readonly List<UserDetail> _users = [];

@@ -7,6 +7,19 @@ public static class ImediatusPermissions
 {
     private static readonly ImediatusPermission[] AllPermissions =
     [     
+        //staorge
+        new("Create Containers", ImediatusActions.Create, ImediatusResources.Containers),
+        new("Create Folders", ImediatusActions.Create, ImediatusResources.Folders),
+        new("Delete Folders", ImediatusActions.Delete, ImediatusResources.Folders),
+        new("Search Folders", ImediatusActions.Search, ImediatusResources.Folders),
+        new("View Blobs", ImediatusActions.View, ImediatusResources.Blobs, IsBasic: true),
+        new("Search Blobs", ImediatusActions.Search, ImediatusResources.Blobs, IsBasic: true),
+        new("Delete Blobs", ImediatusActions.Delete, ImediatusResources.Blobs),
+        new("Download Blobs", ImediatusActions.Download, ImediatusResources.Blobs),
+        new("Rename Blobs", ImediatusActions.Rename, ImediatusResources.Blobs),
+        new("Upload Blobs", ImediatusActions.Upload, ImediatusResources.Blobs),
+        new("Delete Blobs", ImediatusActions.Delete, ImediatusResources.Blobs),
+
         //tenants
         new("View Tenants", ImediatusActions.View, ImediatusResources.Tenants, IsRoot: true),
         new("Create Tenants", ImediatusActions.Create, ImediatusResources.Tenants, IsRoot: true),

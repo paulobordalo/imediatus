@@ -99,6 +99,9 @@ public static class Extensions
         app.MapTenantEndpoints();
         app.MapIdentityEndpoints();
 
+        // Storage minimal APIs
+        app.MapAzureStorageEndpoints();
+
         // Current user middleware
         app.UseMiddleware<CurrentUserMiddleware>();
 
@@ -111,9 +114,6 @@ public static class Extensions
 
         // Map versioned endpoint root
         app.MapGroup("api/v{version:apiVersion}").WithApiVersionSet(versions);
-
-        // Storage minimal APIs
-        app.MapAzureStorageEndpoints();
 
         return app;
     }
