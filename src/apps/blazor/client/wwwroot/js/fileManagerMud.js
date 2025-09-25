@@ -9,7 +9,7 @@ window.fileManagerMud = (function () {
     }
 
     function bindContextMenuClose() {
-        // Called after showing the custom menu; clicking elsewhere closes it (handled above)
+        // Reserved for future logic.
     }
 
     function prompt(message) {
@@ -33,10 +33,42 @@ window.fileManagerMud = (function () {
         }
     }
 
+    // New unified download function:
+    // Parameters:
+    //  fileName: desired download file name
+    //  url: (optional) direct/SAS url. If provided it is preferred.
+    //  contentType: MIME type when using base64 fallback
+    //  base64Data: (optional) base64 payload if no url
+    function downloadFile(fileName, url, contentType, base64Data) {
+        try {
+            if (url) {
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = fileName || "";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                return;
+            }
+            if (base64Data) {
+                const bytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+                const blob = new Blob([bytes], { type: contentType || "application/octet-stream" });
+                const objectUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = objectUrl;
+                a.download = fileName || "download";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(objectUrl);
+            }
+        } catch (e) {
+            console.error("downloadFile failed", e);
+        }
+    }
+
     async function openUploadDialog(ref) {
-        // You can later replace by a MudDialog. For now, let the Blazor side open its own dialog or use input file.
-        // This stub exists so you can wire a custom modal later if desired.
-        // No-op here to keep JS minimal.
+        // Stub for future upload UI
     }
 
     return {
@@ -44,6 +76,7 @@ window.fileManagerMud = (function () {
         bindContextMenuClose,
         prompt,
         saveAsBytes,
+        downloadFile,
         openUploadDialog
     };
 })();

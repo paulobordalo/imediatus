@@ -259,6 +259,27 @@ public class FileManagerMudBase : ComponentBase, IDisposable
         await JS.InvokeVoidAsync("fileManagerMud.saveAsBytes", item.Name, item.ContentType ?? "application/octet-stream", dl.Content);
     }
 
+    // NEW: Explicit download operation (context menu)
+    protected async Task DownloadAsync(FileManagerItem item)
+    {
+        if (item is null || item.IsFolder)
+            return;
+
+        // Try SAS URL first
+        var sasUrl = await GuardAsync(() => Service.TryGetSasUrlAsync(CurrentPath, item.Name));
+        if (!string.IsNullOrWhiteSpace(sasUrl))
+        {
+            await JS.InvokeVoidAsync("fileManagerMud.downloadFile", item.Name, sasUrl, item.ContentType ?? "application/octet-stream", null);
+            return;
+        }
+
+        // Fallback to API base64 content
+        var dl = await GuardAsync(() => Service.GetDownloadAsync(CurrentPath, item.Name));
+        if (dl is null) return;
+
+        await JS.InvokeVoidAsync("fileManagerMud.downloadFile", item.Name, null, item.ContentType ?? "application/octet-stream", dl.Content);
+    }
+
     protected void OpenDetails(FileManagerItem item)
     {
         var info = $"Name: {item.Name}\nType: {(item.IsFolder ? "Folder" : item.ContentType ?? "-")}\nSize: {item.Size} bytes\nModified: {item.Modified}";

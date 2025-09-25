@@ -49,7 +49,6 @@
                      Disabled="@item.Disabled"
                      aria-label="@item.Text"
                      OnClick="@((Microsoft.AspNetCore.Components.Web.MouseEventArgs e) => OnBreadcrumbClick(e, item))">
-                @* opcional: ícone por nível (se usares a sobrecarga com 'Icon') *@
                 @item.Text
             </MudLink>
         </ItemTemplate>
@@ -134,14 +133,15 @@
 								 AnchorOrigin="Origin.TopLeft"
 								 TransformOrigin="Origin.TopLeft"
 								 Icon="@Icons.Material.Filled.MoreVert">
-							<MudMenuItem OnClick="@(() => OnOpenAsync(context))" Icon="@Icons.Material.Filled.OpenInNew">Open</MudMenuItem>
-							<MudMenuItem OnClick="@(() => OpenDetails(context))" Icon="@Icons.Material.Filled.Info">Details</MudMenuItem>
-							<MudMenuItem OnClick="@(() => BeginRename(context))" Icon="@Icons.Material.Filled.DriveFileRenameOutline" Disabled="@(!CanRename)">Rename</MudMenuItem>
-							<MudMenuItem OnClick="@(() => Copy(context))" Icon="@Icons.Material.Filled.ContentCopy">Copy</MudMenuItem>
-							<MudMenuItem OnClick="@(() => Cut(context))" Icon="@Icons.Material.Filled.ContentCut">Cut</MudMenuItem>
+							<MudMenuItem OnClick="@(()=>OnOpenAsync(context))" Icon="@Icons.Material.Filled.OpenInNew">Open</MudMenuItem>
+                            <MudMenuItem OnClick="@(()=>DownloadAsync(context))" Icon="@Icons.Material.Filled.Download" Disabled="@context.IsFolder">Download</MudMenuItem>
+							<MudMenuItem OnClick="@(()=>OpenDetails(context))" Icon="@Icons.Material.Filled.Info">Details</MudMenuItem>
+							<MudMenuItem OnClick="@(()=>BeginRename(context))" Icon="@Icons.Material.Filled.DriveFileRenameOutline" Disabled="@(!CanRename)">Rename</MudMenuItem>
+							<MudMenuItem OnClick="@(()=>Copy(context))" Icon="@Icons.Material.Filled.ContentCopy">Copy</MudMenuItem>
+							<MudMenuItem OnClick="@(()=>Cut(context))" Icon="@Icons.Material.Filled.ContentCut">Cut</MudMenuItem>
 							<MudMenuItem Disabled="@(!CanPaste)" OnClick="@Paste" Icon="@Icons.Material.Filled.ContentPaste">Paste</MudMenuItem>
 							<MudDivider />
-							<MudMenuItem OnClick="@(() => DeleteAsync(context))" Icon="@Icons.Material.Filled.DeleteForever" Class="mud-danger-text">Delete</MudMenuItem>
+							<MudMenuItem OnClick="@(()=>DeleteAsync(context))" Icon="@Icons.Material.Filled.DeleteForever" Class="mud-danger-text">Delete</MudMenuItem>
 						</MudMenu>
 					</MudTd>
 				</RowTemplate>
@@ -184,6 +184,7 @@
              @onclick:stopPropagation="true" @oncontextmenu:stopPropagation="true">
             <MudList T="object" Dense="true">
                 <MudListItem OnClick="@(()=>OnOpenAsync(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.OpenInNew" Class="mr-2" />Open</MudListItem>
+                <MudListItem Disabled="@ContextMenu.Target.IsFolder" OnClick="@(()=>DownloadAsync(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.Download" Class="mr-2" />Download</MudListItem>
                 <MudListItem OnClick="@(()=>OpenDetails(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2" />Details</MudListItem>
                 <MudListItem Disabled="@(!CanRename)" OnClick="@(()=>BeginRename(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.DriveFileRenameOutline" Class="mr-2" />Rename</MudListItem>
                 <MudListItem OnClick="@(()=>Copy(ContextMenu.Target))"><MudIcon Icon="@Icons.Material.Filled.ContentCopy" Class="mr-2" />Copy</MudListItem>
