@@ -19,6 +19,7 @@
 		<PackageReference Include="MudBlazor.Extensions" />
 		<PackageReference Include="MudExObjectEdit.CodeGatorAdapter" />
 		<PackageReference Include="Syncfusion.Blazor" />
+		<PackageReference Include="System.Linq.Dynamic.Core" />
 	</ItemGroup>
 
 	<ItemGroup>
