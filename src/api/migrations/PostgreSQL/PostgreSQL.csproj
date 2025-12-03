@@ -2,6 +2,7 @@
   <PropertyGroup>
     <RootNamespace>imediatus.WebApi.Migrations.PostgreSQL</RootNamespace>
     <AssemblyName>imediatus.WebApi.Migrations.PostgreSQL</AssemblyName>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\framework\Infrastructure\Infrastructure.csproj" />

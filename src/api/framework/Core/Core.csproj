@@ -2,6 +2,7 @@
   <PropertyGroup>
     <RootNamespace>imediatus.Framework.Core</RootNamespace>
     <AssemblyName>imediatus.Framework.Core</AssemblyName>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ardalis.Specification" />
